@@ -1,8 +1,8 @@
-var PLAYER_WIDTH = 50;
-var PLAYER_HEIGHT = 20;
-
 (function () {
 	var ploxfight = window.ploxfight = window.ploxfight || {};
+
+	ploxfight.PLAYER_WIDTH = 50;
+	ploxfight.PLAYER_HEIGHT = 20;
 
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
@@ -15,7 +15,7 @@ var PLAYER_HEIGHT = 20;
 	ploxfight.startRender = function () {
 		var repeater = function () {
 			setTimeout(function () {
-				console.log("repeating");
+				//console.log("repeating");
 				render();
 				repeater();
 			}, 50);
@@ -45,10 +45,9 @@ var PLAYER_HEIGHT = 20;
 		var player = game.player;
 
 		context.translate(player.x, player.y);
-		context.rotate((player.degree + i));
-		context.drawImage(image_player, -(PLAYER_WIDTH / 2), -(PLAYER_HEIGHT / 2));
-		context.rotate(-(player.degree + i));
-		i += 0.05;
+		context.rotate(-player.degree);
+		context.drawImage(image_player, -(ploxfight.PLAYER_WIDTH / 2), -(ploxfight.PLAYER_HEIGHT / 2));
+		context.rotate(player.degree);
 		context.translate(-player.x, -player.y);
 
 		//paint a circle over the character:
@@ -61,6 +60,5 @@ var PLAYER_HEIGHT = 20;
 		context.stroke();
 	};
 
-	var i = 0;
 
 })();

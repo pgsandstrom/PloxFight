@@ -3,6 +3,10 @@
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
 	var game;
+	var canvasX;
+	var canvasY;
+	var mouseX = 0;
+	var mouseY = 0;
 
 	$(function () {
 		// Fugly wait for images to load
@@ -11,8 +15,13 @@
 		}, 100);
 	});
 	var startGame = function () {
-		$("#canvas").mousemove(function (event) {
-//		console.log("plox: " + event.pageY);
+		var $canvas = $("#canvas");
+		canvasX = $canvas.offset().left;
+		canvasY = $canvas.offset().top;
+
+		$canvas.mousemove(function (event) {
+			mouseX = event.pageX;
+			mouseY = event.pageY;
 		});
 
 		game = {};
@@ -21,7 +30,24 @@
 
 
 		ploxfight.startRender();
+		ticRepeater();
 	};
+
+	var ticRepeater = function () {
+		setTimeout(function () {
+			tic();
+			ticRepeater();
+		}, 50);
+	};
+
+	var tic = function () {
+		var xForce = mouseX - (canvasX + game.player.x);
+		var yForce = mouseY - (canvasY + game.player.y);
+		//console.log("force: " + xForce + ", " + yForce);
+		var degree = Math.atan2(xForce, yForce);
+		game.player.degree = degree;
+	};
+
 
 	var newBoard = function () {
 		var board = [];
