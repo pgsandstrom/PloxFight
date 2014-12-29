@@ -2,7 +2,7 @@
 	"use strict";
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
-	var board;
+	var game;
 
 	$(function () {
 		// Fugly wait for images to load
@@ -15,14 +15,16 @@
 //		console.log("plox: " + event.pageY);
 		});
 
-		board = newBoard();
+		game = {};
+		game.board = newBoard();
+		game.player = newPlayer();
 
 
 		ploxfight.startRender();
 	};
 
 	var newBoard = function () {
-		var board = [[]];
+		var board = [];
 
 		for (var y = 0; y < 5; y++) {
 			var row = [];
@@ -34,10 +36,18 @@
 		return board;
 	};
 	var newTile = function () {
-		return Math.random()*100;
+		return Math.floor(Math.random() * 100);
 	};
 
-	ploxfight.getBoard = function () {
-		return board;
+	var newPlayer = function () {
+		return {
+			degree: 0,
+			x: 50,
+			y: 50
+		}
+	};
+
+	ploxfight.getGame = function () {
+		return game;
 	}
 })();
