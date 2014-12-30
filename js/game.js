@@ -7,6 +7,7 @@
 	ploxfight.PLAYER_SPEED = 6;
 	ploxfight.TILE_SIZE = 50;
 	ploxfight.TILE_HEIGHT = 100;	//the board is at height 0, the water is at -100
+	ploxfight.HEIGHT_KILL_CONTROL = -12;	//the board is at height 0, the water is at -100
 
 	ploxfight.key_forward = false;
 	ploxfight.key_left = false;
@@ -99,14 +100,9 @@
 
 	var checkPlayerState = function (player) {
 
-		if (player.height < 0) {
-			player.height--;
-			if (player.height <= -ploxfight.TILE_HEIGHT) {
-				dudeDeath(player);
-			}
-			return;
+		if (player.height <= -ploxfight.TILE_HEIGHT) {
+			dudeDeath(player);
 		}
-
 		var board = game.board;
 		for (var y = 0; y < board.length; y++) {
 			var row = board[y];
@@ -119,6 +115,9 @@
 						playerFall(player);
 					} else {
 						row[x] = tile - 10;
+						if (player.height < 0) {	// Abort falling
+							player.height = 0;
+						}
 					}
 				}
 			}
@@ -126,7 +125,7 @@
 	};
 
 	var playerFall = function (player) {
-		player.height = -2;
+		player.height = player.height - 2;
 	};
 
 	var dudeDeath = function (player) {
@@ -135,7 +134,7 @@
 
 	var handleControl = function () {
 
-		if (game.player.height < 0) {
+		if (game.player.height < ploxfight.HEIGHT_KILL_CONTROL) {
 			return;
 		}
 
