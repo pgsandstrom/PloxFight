@@ -2,16 +2,23 @@
 	"use strict";
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
+	//TODO: Fixa så det alltid tar 33, även om ticet tar tid att utföra
+	ploxfight.TIC_TIME = 33;
+	ploxfight.PLAYER_SPEED = 6;
+	ploxfight.TILE_SIZE = 50;
+
+	ploxfight.key_forward = false;
+	ploxfight.key_left = false;
+	ploxfight.key_right = false;
+	ploxfight.key_back = false;
+
+
 	var game;
 	var canvasX;
 	var canvasY;
 	var mouseX = 0;
 	var mouseY = 0;
 
-	ploxfight.key_forward = false;
-	ploxfight.key_left = false;
-	ploxfight.key_right = false;
-	ploxfight.key_back = false;
 
 	$(function () {
 		// Fugly wait for images to load
@@ -62,6 +69,7 @@
 		game = {};
 		game.board = newBoard();
 		game.player = newPlayer();
+		game.opponent = newOpponent();
 
 
 		ploxfight.startRender();
@@ -72,15 +80,41 @@
 		setTimeout(function () {
 			tic();
 			ticRepeater();
-		}, 33);
+		}, ploxfight.TIC_TIME);
 	};
 
 	var tic = function () {
 
+		handleControl();
+		updateBoard();
+	};
+
+	var updateBoard = function () {
+		checkPlayerTile(game.player);
+	};
+
+	var checkPlayerTile = function (player) {
+		var board = game.board;
+		for (var y = 0; y < board.length; y++) {
+			var row = board[y];
+			for (var x = 0; x < 5; x++) {
+				var tileX = x * ploxfight.TILE_SIZE;
+				var tileY = y * ploxfight.TILE_SIZE;
+				if (player.x > tileX && player.x < tileX + ploxfight.TILE_SIZE && player.y > tileY && player.y < tileY + ploxfight.TILE_SIZE) {
+					var tile = row[x];
+					if (tile <= 0) {
+						//playerFall(player);
+					} else {
+						row[x] = tile-3;
+					}
+				}
+			}
+		}
+	};
+
+	var handleControl = function () {
 		//var preX = game.player.x;
 		//var preY = game.player.y;
-
-		var speed = 6;
 
 		//player direction:
 		var xForce = mouseX - (canvasX + game.player.x);
@@ -88,28 +122,29 @@
 		var degree = Math.atan2(xForce, yForce);
 		game.player.degree = degree;
 
+		var playerSpeed = ploxfight.PLAYER_SPEED;
 		if ((ploxfight.key_forward || ploxfight.key_back) && (ploxfight.key_left || ploxfight.key_right)) {
-			speed = Math.sqrt((speed * speed) / 2);
+			playerSpeed = Math.sqrt((playerSpeed * playerSpeed) / 2);
 		}
 
 		//player motion:
 		if (ploxfight.key_forward) {
-			movePlayer(xForce, yForce, speed);
+			movePlayer(xForce, yForce, playerSpeed);
 		}
 		if (ploxfight.key_back) {
-			movePlayer(-xForce, -yForce, speed);
+			movePlayer(-xForce, -yForce, playerSpeed);
 		}
 		if (ploxfight.key_left) {
 			var leftDegree = degree + Math.PI / 2;
 			var xForceLeft = Math.sin(leftDegree);
 			var yForceLeft = Math.cos(leftDegree);
-			movePlayer(xForceLeft, yForceLeft, speed);
+			movePlayer(xForceLeft, yForceLeft, playerSpeed);
 		}
 		if (ploxfight.key_right) {
 			var rightDegree = degree - Math.PI / 2;
 			var xForceRight = Math.sin(rightDegree);
 			var yForceRight = Math.cos(rightDegree);
-			movePlayer(xForceRight, yForceRight, speed);
+			movePlayer(xForceRight, yForceRight, playerSpeed);
 		}
 
 		//var postX = game.player.x;
@@ -136,6 +171,7 @@
 			yChange *= -1;
 		}
 
+		// We just multiply so it gets the length it is supposed to have
 		var achievedSpeed = Math.sqrt(yChange * yChange + xChange * xChange);
 		var adjust = speed / achievedSpeed;
 
@@ -156,7 +192,7 @@
 		return board;
 	};
 	var newTile = function () {
-		return Math.floor(Math.random() * 100);
+		return Math.floor(250 + Math.random() * 750);
 	};
 
 	var newPlayer = function () {
@@ -167,7 +203,21 @@
 		}
 	};
 
+	var newOpponent = function () {
+		return {
+			degree: 0,
+			x: 200,
+			y: 200
+		}
+	};
+
 	ploxfight.getGame = function () {
 		return game;
+	};
+
+	ploxfight.getDistance = function (x1, y1, x2, y2) {
+		var xDiff = Math.abs(x1 - x2);
+		var yDiff = Math.abs(y1 - y2);
+		return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 	}
 })();
