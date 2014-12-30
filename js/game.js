@@ -6,6 +6,7 @@
 	ploxfight.TIC_TIME = 33;
 	ploxfight.PLAYER_SPEED = 6;
 	ploxfight.TILE_SIZE = 50;
+	ploxfight.TILE_HEIGHT = 100;	//the board is at height 0, the water is at -100
 
 	ploxfight.key_forward = false;
 	ploxfight.key_left = false;
@@ -93,13 +94,14 @@
 
 	var updateBoard = function () {
 		checkPlayerState(game.player);
+		//checkPlayerState(game.opponent);
 	};
 
 	var checkPlayerState = function (player) {
 
 		if (player.height < 0) {
 			player.height--;
-			if (player.height <= -100) {
+			if (player.height <= -ploxfight.TILE_HEIGHT) {
 				dudeDeath(player);
 			}
 			return;
@@ -234,8 +236,8 @@
 			health: 100,
 			height: 0,
 			degree: 0,
-			x: 200,
-			y: 200
+			x: 225,
+			y: 225
 		}
 	};
 

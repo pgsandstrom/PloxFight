@@ -1,8 +1,7 @@
 (function () {
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
-	ploxfight.PLAYER_WIDTH = 50;
-	ploxfight.PLAYER_HEIGHT = 20;
+	var PLAYER_IMAGE_SIZE = 50;
 
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
@@ -63,8 +62,11 @@
 	var renderDude = function (dude, image) {
 		context.translate(dude.x, dude.y);
 		context.rotate(-dude.degree);
-		context.drawImage(image, -(ploxfight.PLAYER_WIDTH / 2), -(ploxfight.PLAYER_HEIGHT / 2),
-			ploxfight.PLAYER_WIDTH * ((dude.height + 100) / 100), ploxfight.PLAYER_HEIGHT * ((dude.height + 100) / 100));
+		var scale = ((dude.height + ploxfight.TILE_HEIGHT) / ploxfight.TILE_HEIGHT);
+		var size = PLAYER_IMAGE_SIZE * scale;
+		var offset = -(PLAYER_IMAGE_SIZE / 2)	//The image should be drawn with the middle on our (x,y), not the corner.
+			+ (PLAYER_IMAGE_SIZE / 2) * (-scale + 1); //when the image shrinks, we need to adjust offset. 0 when scale=1, 0.5 when scale=0.
+		context.drawImage(image, offset, offset, size, size);
 		context.rotate(dude.degree);
 		context.translate(-dude.x, -dude.y);
 	}
