@@ -25,12 +25,11 @@
 	};
 
 	var render = function () {
-		var game = ploxfight.getGame();
-		var board = game.board;
+		var board = ploxfight.game.board;
 
 		for (var y = 0; y < board.length; y++) {
 			var row = board[y];
-			for (var x = 0; x < board.length; x++) {
+			for (var x = 0; x < row.length; x++) {
 				var tile = row[x];
 				//console.log("tile at " + x * 50 + "," + y * 50);
 				if (tile >= 750) {
@@ -45,8 +44,8 @@
 			}
 		}
 
-		renderDude(game.player, image_player);
-		renderDude(game.opponent, image_opponent);
+		renderDude(ploxfight.game.player, image_player);
+		renderDude(ploxfight.game.opponent, image_opponent);
 
 
 		//paint a circle over the character:
