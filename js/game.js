@@ -66,7 +66,7 @@
 			}
 		});
 
-		game = {};
+		game = {running: true};
 		game.board = newBoard();
 		game.player = newPlayer();
 		game.opponent = newOpponent();
@@ -79,7 +79,9 @@
 	var ticRepeater = function () {
 		setTimeout(function () {
 			tic();
-			ticRepeater();
+			if (game.running) {
+				ticRepeater();
+			}
 		}, ploxfight.TIC_TIME);
 	};
 
@@ -90,10 +92,19 @@
 	};
 
 	var updateBoard = function () {
-		checkPlayerTile(game.player);
+		checkPlayerState(game.player);
 	};
 
-	var checkPlayerTile = function (player) {
+	var checkPlayerState = function (player) {
+
+		if (player.height < 0) {
+			player.height--;
+			if (player.height <= -100) {
+				dudeDeath(player);
+			}
+			return;
+		}
+
 		var board = game.board;
 		for (var y = 0; y < board.length; y++) {
 			var row = board[y];
@@ -103,16 +114,29 @@
 				if (player.x > tileX && player.x < tileX + ploxfight.TILE_SIZE && player.y > tileY && player.y < tileY + ploxfight.TILE_SIZE) {
 					var tile = row[x];
 					if (tile <= 0) {
-						//playerFall(player);
+						playerFall(player);
 					} else {
-						row[x] = tile-3;
+						row[x] = tile - 10;
 					}
 				}
 			}
 		}
 	};
 
+	var playerFall = function (player) {
+		player.height = -2;
+	};
+
+	var dudeDeath = function (player) {
+		game.running = false;
+	};
+
 	var handleControl = function () {
+
+		if (game.player.height < 0) {
+			return;
+		}
+
 		//var preX = game.player.x;
 		//var preY = game.player.y;
 
@@ -197,6 +221,8 @@
 
 	var newPlayer = function () {
 		return {
+			health: 100,
+			height: 0,
 			degree: 0,
 			x: 50,
 			y: 50
@@ -205,6 +231,8 @@
 
 	var newOpponent = function () {
 		return {
+			health: 100,
+			height: 0,
 			degree: 0,
 			x: 200,
 			y: 200

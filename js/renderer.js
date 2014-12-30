@@ -63,7 +63,8 @@
 	var renderDude = function (dude, image) {
 		context.translate(dude.x, dude.y);
 		context.rotate(-dude.degree);
-		context.drawImage(image, -(ploxfight.PLAYER_WIDTH / 2), -(ploxfight.PLAYER_HEIGHT / 2));
+		context.drawImage(image, -(ploxfight.PLAYER_WIDTH / 2), -(ploxfight.PLAYER_HEIGHT / 2),
+			ploxfight.PLAYER_WIDTH * ((dude.height + 100) / 100), ploxfight.PLAYER_HEIGHT * ((dude.height + 100) / 100));
 		context.rotate(dude.degree);
 		context.translate(-dude.x, -dude.y);
 	}
