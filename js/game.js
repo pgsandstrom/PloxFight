@@ -72,63 +72,75 @@
 		setTimeout(function () {
 			tic();
 			ticRepeater();
-		}, 50);
+		}, 33);
 	};
 
 	var tic = function () {
 
-		var speed = 10;
+		//var preX = game.player.x;
+		//var preY = game.player.y;
+
+		var speed = 6;
 
 		//player direction:
 		var xForce = mouseX - (canvasX + game.player.x);
 		var yForce = mouseY - (canvasY + game.player.y);
-		var xAbs = Math.abs(xForce);
-		var yAbs = Math.abs(yForce);
 		var degree = Math.atan2(xForce, yForce);
 		game.player.degree = degree;
 
-		var xQuota = xAbs / (xAbs + yAbs);
-		var yQuota = 1 - xQuota;
-
-		var xChange = speed * xQuota;
-		if (xForce < 0) {
-			xChange *= -1;
-		}
-		var yChange = speed * yQuota;
-		if (yForce < 0) {
-			yChange *= -1;
+		if ((ploxfight.key_forward || ploxfight.key_back) && (ploxfight.key_left || ploxfight.key_right)) {
+			speed = Math.sqrt((speed * speed) / 2);
 		}
 
 		//player motion:
 		if (ploxfight.key_forward) {
-			game.player.x += xChange;
-			game.player.y += yChange;
+			movePlayer(xForce, yForce, speed);
 		}
 		if (ploxfight.key_back) {
-			game.player.x -= xChange;
-			game.player.y -= yChange;
+			movePlayer(-xForce, -yForce, speed);
 		}
 		if (ploxfight.key_left) {
 			var leftDegree = degree + Math.PI / 2;
-			var xForce = Math.sin(leftDegree);
-			var yForce = Math.cos(leftDegree);
-			var xAbs = Math.abs(xForce);
-			var yAbs = Math.abs(yForce);
-			var xQuota = xAbs / (xAbs + yAbs);
-			var yQuota = 1 - xQuota;
-
-			var xChange = speed * xQuota;
-			if (xForce < 0) {
-				xChange *= -1;
-			}
-			var yChange = speed * yQuota;
-			if (yForce < 0) {
-				yChange *= -1;
-			}
-			game.player.x += xChange;
-			game.player.y += yChange;
-			console.log("plox");
+			var xForceLeft = Math.sin(leftDegree);
+			var yForceLeft = Math.cos(leftDegree);
+			movePlayer(xForceLeft, yForceLeft, speed);
 		}
+		if (ploxfight.key_right) {
+			var rightDegree = degree - Math.PI / 2;
+			var xForceRight = Math.sin(rightDegree);
+			var yForceRight = Math.cos(rightDegree);
+			movePlayer(xForceRight, yForceRight, speed);
+		}
+
+		//var postX = game.player.x;
+		//var postY = game.player.y;
+		//var diffX = Math.abs(postX - preX);
+		//var diffY = Math.abs(postY - preY);
+		//var totalMoved = Math.sqrt(diffX * diffX + diffY * diffY);
+		//console.log("moved: " + totalMoved);
+	};
+
+	var movePlayer = function (xForce, yForce, speed) {
+		var xAbs = Math.abs(xForce);
+		var yAbs = Math.abs(yForce);
+
+		var xQuota = xAbs / (xAbs + yAbs);
+		var yQuota = 1 - xQuota;
+
+		var xChange = xQuota;
+		if (xForce < 0) {
+			xChange *= -1;
+		}
+		var yChange = yQuota;
+		if (yForce < 0) {
+			yChange *= -1;
+		}
+
+		var achievedSpeed = Math.sqrt(yChange * yChange + xChange * xChange);
+		var adjust = speed / achievedSpeed;
+
+		game.player.x += xChange * adjust;
+		game.player.y += yChange * adjust;
 	};
 
 	var newBoard = function () {

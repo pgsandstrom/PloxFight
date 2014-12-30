@@ -18,7 +18,7 @@
 				//console.log("repeating");
 				render();
 				repeater();
-			}, 50);
+			}, 33);
 		};
 		repeater();
 	};
