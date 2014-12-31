@@ -13,19 +13,28 @@
 	var image_tile2 = document.getElementById('tile-2');
 	var image_water = document.getElementById('water');
 
-	ploxfight.startRender = function () {
+	ploxfight.Renderer = function Renderer(game) {
+		this.game = game;
+	};
+
+	var Renderer = ploxfight.Renderer;
+
+	Renderer.prototype.startRender = function () {
+		var renderer = this;
 		var repeater = function () {
 			setTimeout(function () {
 				//console.log("repeating");
-				render();
-				repeater();
+				renderer.render();
+				if (renderer.game.running) {
+					repeater();
+				}
 			}, 33);
 		};
 		repeater();
 	};
 
-	var render = function () {
-		var board = ploxfight.game.board;
+	Renderer.prototype.render = function () {
+		var board = this.game.board;
 
 		for (var y = 0; y < board.length; y++) {
 			var row = board[y];
@@ -44,8 +53,8 @@
 			}
 		}
 
-		renderDude(ploxfight.game.player, image_player);
-		renderDude(ploxfight.game.opponent, image_opponent);
+		this.renderDude(this.game.player, image_player);
+		this.renderDude(this.game.opponent, image_opponent);
 
 
 		//paint a circle over the character:
@@ -58,7 +67,7 @@
 		//context.stroke();
 	};
 
-	var renderDude = function (dude, image) {
+	Renderer.prototype.renderDude = function (dude, image) {
 		context.translate(dude.x, dude.y);
 		context.rotate(-dude.degree);
 		var scale = ((dude.height + ploxfight.TILE_HEIGHT) / ploxfight.TILE_HEIGHT);

@@ -17,7 +17,7 @@
 		var tic = this;
 		setTimeout(function () {
 			tic.tic();
-			if (ploxfight.game.running) {
+			if (tic.game.running) {
 				tic.ticRepeater();
 			}
 		}, ploxfight.TIC_TIME);
@@ -30,7 +30,7 @@
 	};
 
 	Tic.prototype.updateBoard = function () {
-		this.checkPlayerState(ploxfight.game.player);
+		this.checkPlayerState(this.game.player);
 		//checkPlayerState(game.opponent);
 	};
 
@@ -39,7 +39,7 @@
 		if (player.height <= -ploxfight.TILE_HEIGHT) {
 			this.dudeDeath(player);
 		}
-		var board = ploxfight.game.board;
+		var board = this.game.board;
 		for (var y = 0; y < board.length; y++) {
 			var row = board[y];
 			for (var x = 0; x < 5; x++) {
@@ -65,12 +65,12 @@
 	};
 
 	Tic.prototype.dudeDeath = function (player) {
-		ploxfight.game.running = false;
+		this.game.running = false;
 	};
 
 	Tic.prototype.handleControl = function () {
 
-		if (ploxfight.game.player.height < ploxfight.HEIGHT_KILL_CONTROL) {
+		if (this.game.player.height < ploxfight.HEIGHT_KILL_CONTROL) {
 			return;
 		}
 
@@ -78,10 +78,10 @@
 		//var preY = game.player.y;
 
 		//player direction:
-		var xForce = ploxfight.mouseX - (ploxfight.canvasX + ploxfight.game.player.x);
-		var yForce = ploxfight.mouseY - (ploxfight.canvasY + ploxfight.game.player.y);
+		var xForce = ploxfight.mouseX - (ploxfight.canvasX + this.game.player.x);
+		var yForce = ploxfight.mouseY - (ploxfight.canvasY + this.game.player.y);
 		var degree = Math.atan2(xForce, yForce);
-		ploxfight.game.player.degree = degree;
+		this.game.player.degree = degree;
 
 		var playerSpeed = ploxfight.PLAYER_SPEED;
 		if ((ploxfight.key_forward || ploxfight.key_back) && (ploxfight.key_left || ploxfight.key_right)) {

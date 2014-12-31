@@ -17,34 +17,37 @@
 	ploxfight.mouseX = 0;
 	ploxfight.mouseY = 0;
 
-	//ploxfight.game;
-
 	//ploxfight.canvasX;
 	//ploxfight.canvasY;
 
 	$(function () {
 		// Fugly wait for images to load
 		setTimeout(function () {
-			startGame()
+			var game = new Game();
 		}, 100);
 	});
-	var startGame = function () {
-		var $canvas = $("#canvas");
+
+
+	ploxfight.Game = function Game() {
+		this.running = true;
+		this.board = newBoard();
+		this.player = newPlayer();
+		this.opponent = newOpponent();
+
+		var $canvas = $("#canvas");	//TODO move this stuff?
 		ploxfight.canvasX = $canvas.offset().left;
 		ploxfight.canvasY = $canvas.offset().top;
 
-		ploxfight.game = {running: true};
-		ploxfight.game.board = newBoard();
-		ploxfight.game.player = newPlayer();
-		ploxfight.game.opponent = newOpponent();
+		ploxfight.startControl();	//TODO where to place control.js code?
 
+		this.renderer = new ploxfight.Renderer(this);
+		this.renderer.startRender();
 
-		ploxfight.startControl();
-		ploxfight.startRender();
-
-		var tic = new ploxfight.Tic(ploxfight.game);
-		tic.startTic();
+		this.tic = new ploxfight.Tic(this);
+		this.tic.startTic();
 	};
+
+	var Game = ploxfight.Game;
 
 	var newBoard = function () {
 		var board = [];
