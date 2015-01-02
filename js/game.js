@@ -62,7 +62,11 @@
 		return board;
 	};
 	var newTile = function () {
-		return Math.floor(250 + Math.random() * 750);
+		return {
+			health: Math.floor(250 + Math.random() * 750),
+			breaking: 1000,
+			falling: 1000
+		}
 	};
 
 	var newPlayer = function () {

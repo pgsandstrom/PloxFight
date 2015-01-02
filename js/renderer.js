@@ -8,9 +8,14 @@
 
 	var image_player = document.getElementById('player');
 	var image_opponent = document.getElementById('opponent');
-	var image_tile0 = document.getElementById('tile-0');
 	var image_tile1 = document.getElementById('tile-1');
 	var image_tile2 = document.getElementById('tile-2');
+	var image_tile3 = document.getElementById('tile-3');
+	var image_tile_breaking_1 = document.getElementById('tile-breaking-1');
+	var image_tile_breaking_2 = document.getElementById('tile-breaking-2');
+	var image_tile_breaking_3 = document.getElementById('tile-breaking-3');
+	var image_tile_breaking_4 = document.getElementById('tile-breaking-4');
+	var image_tile_breaking_5 = document.getElementById('tile-breaking-5');
 	var image_water = document.getElementById('water');
 
 	ploxfight.Renderer = function Renderer(game) {
@@ -41,12 +46,22 @@
 			for (var x = 0; x < row.length; x++) {
 				var tile = row[x];
 				//console.log("tile at " + x * 50 + "," + y * 50);
-				if (tile >= 750) {
-					context.drawImage(image_tile0, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
-				} else if (tile >= 500) {
+				if (tile.health >= 750) {
 					context.drawImage(image_tile1, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
-				} else if (tile > 0) {
+				} else if (tile.health >= 500) {
 					context.drawImage(image_tile2, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+				} else if (tile.health > 0) {
+					context.drawImage(image_tile3, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+				} else if (tile.breaking > 800) {
+					context.drawImage(image_tile_breaking_1, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+				} else if (tile.breaking > 600) {
+					context.drawImage(image_tile_breaking_2, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+				} else if (tile.breaking > 400) {
+					context.drawImage(image_tile_breaking_3, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+				} else if (tile.breaking > 200) {
+					context.drawImage(image_tile_breaking_4, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+				} else if (tile.breaking > 0) {
+					context.drawImage(image_tile_breaking_5, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
 				} else {
 					context.drawImage(image_water, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
 				}
@@ -78,6 +93,4 @@
 		context.rotate(dude.degree);
 		context.translate(-dude.x, -dude.y);
 	}
-
-
 })();

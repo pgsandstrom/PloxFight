@@ -45,15 +45,26 @@
 			for (var x = 0; x < 5; x++) {
 				var tileX = x * ploxfight.TILE_SIZE;
 				var tileY = y * ploxfight.TILE_SIZE;
+				var tile = row[x];
+				// If player are standing on tile:
 				if (player.x > tileX && player.x < tileX + ploxfight.TILE_SIZE && player.y > tileY && player.y < tileY + ploxfight.TILE_SIZE) {
-					var tile = row[x];
-					if (tile <= 0) {
+					if (tile.breaking <= 0) {
 						this.playerFall(player);
 					} else {
-						row[x] = tile - 10;
-						if (player.height < 0) {	// Abort falling
+						if (tile.health > 0) {
+							tile.health -= 10;
+						}
+						if (tile.breaking > 0 && player.height < 0) {	// Abort falling
 							player.height = 0;
 						}
+					}
+				}
+				// If tile is dead:
+				if (tile.health <= 0) {
+					if (tile.breaking > 0) {
+						tile.breaking -= ploxfight.TIC_TIME;
+					} else if (tile.falling > 0) {
+						tile.falling -= ploxfight.TIC_TIME;
 					}
 				}
 			}
