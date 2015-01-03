@@ -92,5 +92,21 @@
 		context.drawImage(image, offset, offset, size, size);
 		context.rotate(dude.degree);
 		context.translate(-dude.x, -dude.y);
+
+		var squareCorners = ploxfight.getSquareCorners(dude);
+		for (var y = 0; y < squareCorners.length; y++) {
+			var first;
+			if (y === 0) {
+				first = squareCorners[squareCorners.length - 1];
+			} else {
+				first = squareCorners[y - 1];
+			}
+			var second = squareCorners[y];
+
+			context.beginPath();
+			context.moveTo(first.x, first.y);
+			context.lineTo(second.x, second.y);
+			context.stroke();
+		}
 	}
 })();

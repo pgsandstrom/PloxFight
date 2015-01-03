@@ -69,29 +69,35 @@
 		}
 	};
 
+	var getVectors = function () {
+
+	};
+
 	var newPlayer = function () {
-		return {
-			health: 100,
-			height: 0,
-			degree: 0,
-			x: 50,
-			y: 50
-		}
+		return new Player(50, 50);
 	};
 
 	var newOpponent = function () {
-		return {
-			health: 100,
-			height: 0,
-			degree: 0,
-			x: 225,
-			y: 225
-		}
+		return new Player(225, 225);
 	};
 
-	ploxfight.getDistance = function (x1, y1, x2, y2) {
-		var xDiff = Math.abs(x1 - x2);
-		var yDiff = Math.abs(y1 - y2);
-		return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-	}
+	ploxfight.Player = function Player(x, y) {
+		this.health = 100;
+		this.height = 0;
+		this.degree = 0;
+		this.x = x;
+		this.y = y;
+		this.shape = ploxfight.shape.SQUARE;	//TODO extend square instead? Naah...
+		this.shapeWidth = 50;
+		this.shapeHeight = 20;
+	};
+
+	var Player = ploxfight.Player;
+
+	Player.prototype.getVectors = function () {
+		var x = this.x;
+		var y = this.y;
+
+	};
+
 })();
