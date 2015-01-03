@@ -31,7 +31,7 @@
 
 	Tic.prototype.updateBoard = function () {
 		this.checkPlayerState(this.game.player);
-		//checkPlayerState(game.opponent);
+		ploxfight.checkCollisions(this.game.player, this.game.opponent);
 	};
 
 	Tic.prototype.checkPlayerState = function (player) {
@@ -52,7 +52,7 @@
 						this.playerFall(player);
 					} else {
 						if (tile.health > 0) {
-							tile.health -= 10;
+							//tile.health -= 10;	//TODO removed temporarily!
 						}
 						if (tile.breaking > 0 && player.height < 0) {	// Abort falling
 							player.height = 0;
