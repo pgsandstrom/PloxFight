@@ -17,6 +17,7 @@
 	var image_tile_breaking_4 = document.getElementById('tile-breaking-4');
 	var image_tile_breaking_5 = document.getElementById('tile-breaking-5');
 	var image_water = document.getElementById('water');
+	var image_barrel = document.getElementById('barrel');
 
 	ploxfight.Renderer = function Renderer(game) {
 		this.game = game;
@@ -71,6 +72,9 @@
 		this.renderDude(this.game.player, image_player);
 		this.renderDude(this.game.opponent, image_opponent);
 
+		for (var i = 0; i < this.game.barrels.length; i++) {
+			this.renderBarrel(this.game.barrels[i]);
+		}
 
 		//paint a circle over the character:
 		//context.beginPath();
@@ -80,6 +84,10 @@
 		//context.lineWidth = 5;
 		//context.strokeStyle = '#003300';
 		//context.stroke();
+	};
+
+	Renderer.prototype.renderBarrel = function (barrel) {
+		context.drawImage(image_barrel, barrel.x - barrel.radius, barrel.y - barrel.radius);
 	};
 
 	Renderer.prototype.renderDude = function (dude, image) {

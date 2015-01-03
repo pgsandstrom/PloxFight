@@ -34,6 +34,9 @@
 		this.player = newPlayer();
 		this.opponent = newOpponent();
 
+		this.barrels = [];
+		this.barrels.push(new Barrel());
+
 		var $canvas = $("#canvas");	//TODO move this stuff?
 		ploxfight.canvasX = $canvas.offset().left;
 		ploxfight.canvasY = $canvas.offset().top;
@@ -61,16 +64,13 @@
 		}
 		return board;
 	};
+
 	var newTile = function () {
 		return {
 			health: Math.floor(250 + Math.random() * 750),
 			breaking: 1000,
 			falling: 1000
 		}
-	};
-
-	var getVectors = function () {
-
 	};
 
 	var newPlayer = function () {
@@ -87,17 +87,24 @@
 		this.degree = 0;
 		this.x = x;
 		this.y = y;
-		this.shape = ploxfight.shape.SQUARE;	//TODO extend square instead? Naah...
+		this.shape = ploxfight.shape.SQUARE;
 		this.shapeWidth = 50;
 		this.shapeHeight = 20;
 	};
 
 	var Player = ploxfight.Player;
 
-	Player.prototype.getVectors = function () {
-		var x = this.x;
-		var y = this.y;
-
+	ploxfight.Barrel = function Barrel(x, y) {
+		this.health = 100;
+		this.height = 0;
+		this.degree = 0;
+		this.x = x !== undefined ? x : Math.floor(75 + Math.random() * 100);
+		this.y = y !== undefined ? y : Math.floor(75 + Math.random() * 100);
+		this.shape = ploxfight.shape.CIRCLE;
+		this.radius = 25;
 	};
+
+	var Barrel = ploxfight.Barrel;
+
 
 })();

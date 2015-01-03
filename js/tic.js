@@ -31,7 +31,17 @@
 
 	Tic.prototype.updateBoard = function () {
 		this.checkPlayerState(this.game.player);
-		ploxfight.checkCollisions(this.game.player, this.game.opponent);
+		var collisionables = [];
+		collisionables.push(this.game.player);
+		collisionables.push(this.game.opponent);
+		collisionables.push.apply(collisionables, this.game.barrels);
+		for (var i = 0; i < collisionables.length;i++) {
+			var object1 = collisionables[i];
+			for (var j = i+1; j < collisionables.length; j++) {
+				var object2 = collisionables[j];
+				ploxfight.checkCollisions(object1, object2);
+			}
+		}
 	};
 
 	Tic.prototype.checkPlayerState = function (player) {

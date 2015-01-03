@@ -1,5 +1,3 @@
-// http://jsfiddle.net/ARTsinn/FpEZf/
-
 (function () {
 	"use strict";
 	var ploxfight = window.ploxfight = window.ploxfight || {};
@@ -203,6 +201,12 @@
 	Vector.prototype.len = function () {
 		return Math.sqrt(this.len2());
 	};
+
+	var Circle = function (pos, radius) {
+		this.pos = pos || new Vector();
+		this.radius = radius || 0;
+	};
+	ploxfight.Circle = Circle;
 
 
 	var Polygon = function (pos, points) {

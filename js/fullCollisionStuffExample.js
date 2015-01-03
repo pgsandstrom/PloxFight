@@ -219,12 +219,12 @@
 	 * A circle.
 	 *
 	 * @param {Vector=} pos A vector representing the position of the center of the circle
-	 * @param {Number} r The radius of the circle
+	 * @param {Number} radius The radius of the circle
 	 * @constructor
 	 */
-	var Circle = function (pos, r) {
+	var Circle = function (pos, radius) {
 		this.pos = pos || new Vector();
-		this.r = r || 0;
+		this.radius = radius || 0;
 	};
 	SAT.Circle = Circle;
 
