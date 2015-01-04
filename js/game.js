@@ -74,11 +74,11 @@
 	var newTile = function (health) {
 		var tileHeath = health !== undefined ? health : Math.floor(250 + Math.random() * 750);
 		var breaking = health === 0 ? 0 : 1000;
-		var falling = health === 0 ? 0 : 1000;
+		var height = health === 0 ? -ploxfight.TILE_HEIGHT : 0;
 		return {
 			health: tileHeath,
 			breaking: breaking,
-			falling: falling
+			height: height
 		}
 	};
 

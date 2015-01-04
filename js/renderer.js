@@ -2,6 +2,7 @@
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
 	var PLAYER_IMAGE_SIZE = 50;
+	var BARREL_IMAGE_SIZE = 50;
 
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
@@ -16,6 +17,7 @@
 	var image_tile_breaking_3 = document.getElementById('tile-breaking-3');
 	var image_tile_breaking_4 = document.getElementById('tile-breaking-4');
 	var image_tile_breaking_5 = document.getElementById('tile-breaking-5');
+	var image_tile_falling_1 = document.getElementById('tile-falling-1');
 	var image_water = document.getElementById('water');
 	var image_barrel = document.getElementById('barrel');
 
@@ -63,6 +65,14 @@
 					context.drawImage(image_tile_breaking_4, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
 				} else if (tile.breaking > 0) {
 					context.drawImage(image_tile_breaking_5, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+				} else if (tile.height > -ploxfight.TILE_HEIGHT) {
+					context.drawImage(image_water, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
+					var object = {
+						x: (x + 0.5) * ploxfight.TILE_SIZE,
+						y: (y + 0.5) * ploxfight.TILE_SIZE,
+						height: tile.height
+					};
+					renderObject(object, image_tile_falling_1, ploxfight.TILE_SIZE);
 				} else {
 					context.drawImage(image_water, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
 				}
@@ -89,19 +99,23 @@
 	};
 
 	Renderer.prototype.renderBarrel = function (barrel) {
-		context.drawImage(image_barrel, barrel.x - barrel.radius, barrel.y - barrel.radius);
+		renderObject(barrel, image_barrel, BARREL_IMAGE_SIZE);
 	};
 
 	Renderer.prototype.renderDude = function (dude, image) {
-		context.translate(dude.x, dude.y);
-		context.rotate(-dude.degree);
-		var scale = ((dude.height + ploxfight.TILE_HEIGHT) / ploxfight.TILE_HEIGHT);
-		var size = PLAYER_IMAGE_SIZE * scale;
-		var offset = -(PLAYER_IMAGE_SIZE / 2)	//The image should be drawn with the middle on our (x,y), not the corner.
-			+ (PLAYER_IMAGE_SIZE / 2) * (-scale + 1); //when the image shrinks, we need to adjust offset. 0 when scale=1, 0.5 when scale=0.
+		renderObject(dude, image, PLAYER_IMAGE_SIZE);
+	};
+
+	var renderObject = function (object, image, imageSize) {
+		context.translate(object.x, object.y);
+		context.rotate(-object.degree);
+		var scale = ((object.height + ploxfight.TILE_HEIGHT) / ploxfight.TILE_HEIGHT);
+		var size = imageSize * scale;
+		var offset = -(imageSize / 2)	// The image should be drawn with the middle on our (x,y), not the corner.
+			+ (imageSize / 2) * (-scale + 1); // When the image shrinks, we need to adjust offset. 0 when scale=1, 0.5 when scale=0.
 		context.drawImage(image, offset, offset, size, size);
-		context.rotate(dude.degree);
-		context.translate(-dude.x, -dude.y);
+		context.rotate(object.degree);
+		context.translate(-object.x, -object.y);
 
 		//var squareCorners = ploxfight.getSquareCorners(dude);
 		//for (var y = 0; y < squareCorners.length; y++) {
