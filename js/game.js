@@ -5,6 +5,7 @@
 	//TODO: Fixa så det alltid tar 33, även om ticet tar tid att utföra
 	ploxfight.TIC_TIME = 33;
 	ploxfight.PLAYER_SPEED = 6;
+	ploxfight.BOARD_SIZE = 10;
 	ploxfight.TILE_SIZE = 50;
 	ploxfight.TILE_HEIGHT = 100;	//the board is at height 0, the water is at -100
 	ploxfight.HEIGHT_KILL_CONTROL = -12;	//the board is at height 0, the water is at -100
@@ -56,30 +57,37 @@
 	var newBoard = function () {
 		var board = [];
 
-		for (var y = 0; y < 5; y++) {
+		for (var y = 0; y < ploxfight.BOARD_SIZE; y++) {
 			var row = [];
 			board.push(row);
-			for (var x = 0; x < 5; x++) {
-				row.push(newTile());
+			for (var x = 0; x < ploxfight.BOARD_SIZE; x++) {
+				if (y === 0 || y === ploxfight.BOARD_SIZE - 1 || x === 0 || x === ploxfight.BOARD_SIZE - 1) {
+					row.push(newTile(0));
+				} else {
+					row.push(newTile());
+				}
 			}
 		}
 		return board;
 	};
 
-	var newTile = function () {
+	var newTile = function (health) {
+		var tileHeath = health !== undefined ? health : Math.floor(250 + Math.random() * 750);
+		var breaking = health === 0 ? 0 : 1000;
+		var falling = health === 0 ? 0 : 1000;
 		return {
-			health: Math.floor(250 + Math.random() * 750),
-			breaking: 1000,
-			falling: 1000
+			health: tileHeath,
+			breaking: breaking,
+			falling: falling
 		}
 	};
 
 	var newPlayer = function () {
-		return new Player(50, 50);
+		return new Player(75, 75);
 	};
 
 	var newOpponent = function () {
-		return new Player(225, 225);
+		return new Player(425, 425);
 	};
 
 	ploxfight.Player = function Player(x, y) {

@@ -2,9 +2,14 @@
 	"use strict";
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
-	var temp = 30;
+	var temp = 50;
 
 	ploxfight.ai = function (game, dude) {
+
+		if (dude.height < ploxfight.HEIGHT_KILL_CONTROL) {
+			return;
+		}
+
 		var xForce = game.player.x - (ploxfight.canvasX + dude.x);
 		var yForce = game.player.y - (ploxfight.canvasY + dude.y);
 		var degree = Math.atan2(xForce, yForce);

@@ -26,16 +26,22 @@
 	Tic.prototype.tic = function () {
 
 		this.handleControl(this.game.player);
-		ploxfight.ai(this.game, this.game.opponent);
+		if (this.game.opponent !== undefined) {
+			ploxfight.ai(this.game, this.game.opponent);
+		}
 		this.updateBoard();
 	};
 
 	Tic.prototype.updateBoard = function () {
 		this.checkPlayerState(this.game.player);
-		this.checkPlayerState(this.game.opponent);
+		if (this.game.opponent !== undefined) {
+			this.checkPlayerState(this.game.opponent);
+		}
 		var collisionables = [];
 		collisionables.push(this.game.player);
-		collisionables.push(this.game.opponent);
+		if (this.game.opponent !== undefined) {
+			collisionables.push(this.game.opponent);
+		}
 		collisionables.push.apply(collisionables, this.game.barrels);
 		for (var i = 0; i < collisionables.length; i++) {
 			var object1 = collisionables[i];
@@ -54,7 +60,7 @@
 		var board = this.game.board;
 		for (var y = 0; y < board.length; y++) {
 			var row = board[y];
-			for (var x = 0; x < 5; x++) {
+			for (var x = 0; x < board.length; x++) {
 				var tileX = x * ploxfight.TILE_SIZE;
 				var tileY = y * ploxfight.TILE_SIZE;
 				var tile = row[x];
@@ -64,7 +70,7 @@
 						this.playerFall(player);
 					} else {
 						if (tile.health > 0) {
-							//tile.health -= 10;	//TODO removed temporarily!
+							tile.health -= 10;
 						}
 						if (tile.breaking > 0 && player.height < 0) {	// Abort falling
 							player.height = 0;

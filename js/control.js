@@ -10,6 +10,10 @@
 
 	ploxfight.moveDude = function (dude, moves) {
 
+		if (dude.height < ploxfight.HEIGHT_KILL_CONTROL) {
+			return;
+		}
+
 		//xForce and yForce is calculated twice for human controlled players currently. Could be optimized
 		var xForce = Math.sin(dude.degree);
 		var yForce = Math.cos(dude.degree);

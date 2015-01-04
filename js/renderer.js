@@ -70,7 +70,9 @@
 		}
 
 		this.renderDude(this.game.player, image_player);
-		this.renderDude(this.game.opponent, image_opponent);
+		if (this.game.opponent !== undefined) {
+			this.renderDude(this.game.opponent, image_opponent);
+		}
 
 		for (var i = 0; i < this.game.barrels.length; i++) {
 			this.renderBarrel(this.game.barrels[i]);
@@ -101,20 +103,20 @@
 		context.rotate(dude.degree);
 		context.translate(-dude.x, -dude.y);
 
-		var squareCorners = ploxfight.getSquareCorners(dude);
-		for (var y = 0; y < squareCorners.length; y++) {
-			var first;
-			if (y === 0) {
-				first = squareCorners[squareCorners.length - 1];
-			} else {
-				first = squareCorners[y - 1];
-			}
-			var second = squareCorners[y];
-
-			context.beginPath();
-			context.moveTo(first.x, first.y);
-			context.lineTo(second.x, second.y);
-			context.stroke();
-		}
+		//var squareCorners = ploxfight.getSquareCorners(dude);
+		//for (var y = 0; y < squareCorners.length; y++) {
+		//	var first;
+		//	if (y === 0) {
+		//		first = squareCorners[squareCorners.length - 1];
+		//	} else {
+		//		first = squareCorners[y - 1];
+		//	}
+		//	var second = squareCorners[y];
+		//
+		//	context.beginPath();
+		//	context.moveTo(first.x, first.y);
+		//	context.lineTo(second.x, second.y);
+		//	context.stroke();
+		//}
 	}
 })();
