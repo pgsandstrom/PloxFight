@@ -26,8 +26,9 @@
 	Tic.prototype.tic = function () {
 
 		this.handleControl(this.game.player);
-		if (this.game.opponent !== undefined) {
-			ploxfight.ai(this.game, this.game.opponent);
+		for (var i = 0; i < this.game.opponents.length; i++) {
+			var dude = this.game.opponents[i];
+			ploxfight.ai(this.game, dude);
 		}
 		this.updateBoard();
 	};
@@ -36,8 +37,9 @@
 		this.updateTiles();
 		this.updateBarrels();
 		this.checkPlayerState(this.game.player);
-		if (this.game.opponent !== undefined) {
-			this.checkPlayerState(this.game.opponent);
+		for (var i = 0; i < this.game.opponents.length; i++) {
+			var dude = this.game.opponents[i];
+			this.checkPlayerState(dude);
 		}
 
 		this.updateCollisions();
@@ -139,9 +141,7 @@
 	Tic.prototype.updateCollisions = function () {
 		var collisionables = [];
 		collisionables.push(this.game.player);
-		if (this.game.opponent !== undefined) {
-			collisionables.push(this.game.opponent);
-		}
+		collisionables.push.apply(collisionables, this.game.opponents);
 		collisionables.push.apply(collisionables, this.game.barrels);
 		for (var i = 0; i < collisionables.length; i++) {
 			var object1 = collisionables[i];

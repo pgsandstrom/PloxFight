@@ -1,3 +1,7 @@
 .resource {
 	display: none;
 }
+
+canvas {
+	position: fixed;
+}

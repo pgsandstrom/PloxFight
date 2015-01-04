@@ -33,7 +33,9 @@
 		this.running = true;
 		this.board = newBoard();
 		this.player = newPlayer();
-		this.opponent = newOpponent();
+		this.opponents = [];
+		this.opponents.push(newOpponent());
+		this.opponents.push(newOpponent());
 
 		this.barrels = [];
 		this.barrels.push(new Barrel());

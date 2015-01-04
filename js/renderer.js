@@ -7,8 +7,18 @@
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
 
+	var canvas_1 = document.getElementById('canvas-1');
+	var canvas_2 = document.getElementById('canvas-2');
+	var canvas_3 = document.getElementById('canvas-3');
+	var canvas_4 = document.getElementById('canvas-4');
+
+	var contextLayers = [];
+	contextLayers.push(canvas_1.getContext('2d'));
+	contextLayers.push(canvas_2.getContext('2d'));
+	contextLayers.push(canvas_3.getContext('2d'));
+	contextLayers.push(canvas_4.getContext('2d'));
+
 	var image_player = document.getElementById('player');
-	var image_opponent = document.getElementById('opponent');
 	var image_tile1 = document.getElementById('tile-1');
 	var image_tile2 = document.getElementById('tile-2');
 	var image_tile3 = document.getElementById('tile-3');
@@ -72,16 +82,18 @@
 						y: (y + 0.5) * ploxfight.TILE_SIZE,
 						height: tile.height
 					};
-					renderObject(object, image_tile_falling_1, ploxfight.TILE_SIZE);
+					renderObject(object, image_tile_falling_1, ploxfight.TILE_SIZE, context);
 				} else {
 					context.drawImage(image_water, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
 				}
 			}
 		}
 
-		this.renderDude(this.game.player, image_player);
-		if (this.game.opponent !== undefined) {
-			this.renderDude(this.game.opponent, image_opponent);
+		this.renderDude(this.game.player, image_player, 1);
+
+		for (var i = 0; i < this.game.opponents.length; i++) {
+			var dude = this.game.opponents[i];
+			this.renderDude(dude, image_player, i + 2);
 		}
 
 		for (var i = 0; i < this.game.barrels.length; i++) {
@@ -99,14 +111,23 @@
 	};
 
 	Renderer.prototype.renderBarrel = function (barrel) {
-		renderObject(barrel, image_barrel, BARREL_IMAGE_SIZE);
+		renderObject(barrel, image_barrel, BARREL_IMAGE_SIZE, context);
 	};
 
-	Renderer.prototype.renderDude = function (dude, image) {
-		renderObject(dude, image, PLAYER_IMAGE_SIZE);
+	var DUDE_CLEAR_LENGTH = Math.sqrt(PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE + PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE);
+
+	Renderer.prototype.renderDude = function (dude, image, dudeIndex) {
+		var context = contextLayers[dudeIndex];
+		var x = dude.x - DUDE_CLEAR_LENGTH / 2;
+		var y = dude.y - DUDE_CLEAR_LENGTH / 2;
+		var width = DUDE_CLEAR_LENGTH;
+		var height = DUDE_CLEAR_LENGTH;
+		context.clearRect(x, y, DUDE_CLEAR_LENGTH, DUDE_CLEAR_LENGTH);
+		renderObject(dude, image, PLAYER_IMAGE_SIZE, context);
+		fixImage(context, x, y, width, height, dudeIndex);
 	};
 
-	var renderObject = function (object, image, imageSize) {
+	var renderObject = function (object, image, imageSize, context) {
 		context.translate(object.x, object.y);
 		context.rotate(-object.degree);
 		var scale = ((object.height + ploxfight.TILE_HEIGHT) / ploxfight.TILE_HEIGHT);
@@ -132,5 +153,38 @@
 		//	context.lineTo(second.x, second.y);
 		//	context.stroke();
 		//}
+	};
+
+
+	function fixImage(context, x, y, width, height, filter) {
+
+		if (filter === 1) {
+			return;
+		}
+
+		//var timeInMs = Date.now();
+		var imageData = context.getImageData(x, y, width, height);
+		var data = imageData.data;
+
+		for (var i = 0; i < data.length; i += 4) {
+			// red
+			if (filter === 2) {
+				data[i] = 255 - data[i];
+			}
+			// green
+			if (filter === 3) {
+				data[i + 1] = 255 - data[i + 1];
+			}
+			// blue
+			if (filter === 4) {
+				data[i + 2] = 255 - data[i + 2];
+			}
+		}
+
+		// overwrite original image
+		context.putImageData(imageData, x, y);
+
+		//timeInMs = Date.now() - timeInMs;
+		//console.log(timeInMs);
 	}
 })();
