@@ -2,8 +2,8 @@
 	"use strict";
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
-	//TODO: Fixa så det alltid tar 33, även om ticet tar tid att utföra
-	ploxfight.TIC_TIME = 33;
+	ploxfight.RENDER_TIC_TIME = 33;
+	ploxfight.GAME_TIC_TIME = 33;
 	ploxfight.PLAYER_SPEED = 6;
 	ploxfight.BOARD_SIZE = 10;
 	ploxfight.TILE_SIZE = 50;

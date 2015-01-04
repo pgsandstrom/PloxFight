@@ -10,18 +10,34 @@
 	var Tic = ploxfight.Tic;
 
 	Tic.prototype.startTic = function () {
-		this.ticRepeater();
+		this.ticRepeater(0);
 	};
 
-	Tic.prototype.ticRepeater = function () {
+	Tic.prototype.ticRepeater = function (stalled) {
 		var tic = this;
 		setTimeout(function () {
+			var startTime = Date.now();
 			tic.tic();
-			if (tic.game.running) {
-				tic.ticRepeater();
+			var time = Date.now() - startTime;
+			if (time > 8) {
+				console.log("SLOW GAME TIC: " + time);
 			}
-		}, ploxfight.TIC_TIME);
+			//console.log("GAME   TIC: " + time);
+			if (tic.game.running) {
+				tic.ticRepeater(time);
+			}
+		}, ploxfight.GAME_TIC_TIME - stalled);
 	};
+
+	// Why the fudge does this loop now work?
+	//Tic.prototype.ticRepeater = function () {
+	//	//var time = Date.now();
+	//	this.tic();
+	//	//time = Date.now() - time;
+	//	if (this.game.running) {
+	//		setTimeout(this.ticRepeater(), ploxfight.GAME_TIC_TIME);
+	//	}
+	//};
 
 	Tic.prototype.tic = function () {
 
@@ -54,7 +70,7 @@
 				// If tile is dead, animate:
 				if (tile.health <= 0) {
 					if (tile.breaking > 0) {
-						tile.breaking -= ploxfight.TIC_TIME;
+						tile.breaking -= ploxfight.GAME_TIC_TIME;
 					} else {
 						this.objectFall(tile);
 					}

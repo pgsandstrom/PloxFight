@@ -32,6 +32,7 @@
 	var image_barrel = document.getElementById('barrel');
 
 	ploxfight.Renderer = function Renderer(game) {
+		this.startTime = Date.now();
 		this.game = game;
 	};
 
@@ -39,16 +40,23 @@
 
 	Renderer.prototype.startRender = function () {
 		var renderer = this;
-		var repeater = function () {
+		var repeater = function (stalled) {
 			setTimeout(function () {
-				//console.log("repeating");
+				var startTime = Date.now();
 				renderer.render();
-				if (renderer.game.running) {
-					repeater();
+				//var e = new Date().getTime() + (20);	// Faked waiting for testing purposes
+				//while (new Date().getTime() <= e) {}
+				var time = Date.now() - startTime;
+				if (time > 8 && startTime > renderer.startTime + 300) {
+					console.log("SLOW RENDER TIC: " + time);
 				}
-			}, 33);
+				//console.log("RENDER TIC: " + time);
+				if (renderer.game.running) {
+					repeater(time);
+				}
+			}, ploxfight.RENDER_TIC_TIME - stalled);
 		};
-		repeater();
+		repeater(0);
 	};
 
 	Renderer.prototype.render = function () {
@@ -114,7 +122,8 @@
 		renderObject(barrel, image_barrel, BARREL_IMAGE_SIZE, context);
 	};
 
-	var DUDE_CLEAR_LENGTH = Math.sqrt(PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE + PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE);
+	// "* 1.2" is to be safe with this ugly solution. A player can travel faster if he is being pushed and stuff like that
+	var DUDE_CLEAR_LENGTH = Math.sqrt(PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE + PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE) * 1.2;
 
 	Renderer.prototype.renderDude = function (dude, image, dudeIndex) {
 		var context = contextLayers[dudeIndex];
