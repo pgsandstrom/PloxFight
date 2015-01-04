@@ -34,15 +34,15 @@
 
 		response.clear();
 		var collision;
-		if(object1.shape === ploxfight.shape.SQUARE && object2.shape === ploxfight.shape.SQUARE) {
+		if (object1.shape === ploxfight.shape.SQUARE && object2.shape === ploxfight.shape.SQUARE) {
 			var polygon1 = squareToPolygon(object1);
 			var polygon2 = squareToPolygon(object2);
 			collision = testPolygonPolygon(polygon1, polygon2, response);
-		} else if(object1.shape === ploxfight.shape.SQUARE && object2.shape === ploxfight.shape.CIRCLE) {
+		} else if (object1.shape === ploxfight.shape.SQUARE && object2.shape === ploxfight.shape.CIRCLE) {
 			var polygon1 = squareToPolygon(object1);
 			var circle2 = circleToCircle(object2);
 			collision = testPolygonCircle(polygon1, circle2, response);
-		} else if(object1.shape === ploxfight.shape.CIRCLE && object2.shape === ploxfight.shape.SQUARE) {
+		} else if (object1.shape === ploxfight.shape.CIRCLE && object2.shape === ploxfight.shape.SQUARE) {
 			var circle1 = circleToCircle(object1);
 			var polygon2 = squareToPolygon(object2);
 			collision = testCirclePolygon(circle1, polygon2, response);
@@ -55,18 +55,20 @@
 
 
 		if (collision) {
+			object1.x -= response.overlapV.x / 1.5;
+			object1.y -= response.overlapV.y / 1.5;
 			object2.x += response.overlapV.x;
 			object2.y += response.overlapV.y;
 		}
 	};
 
-	var squareToPolygon = function(square) {
+	var squareToPolygon = function (square) {
 		// I don't know why I need to double vector size here...
 		var vectors = ploxfight.getSquareVectors(square, true);
 		return new ploxfight.Polygon(new ploxfight.Vector(square.x, square.y), vectors);
 	};
 
-	var circleToCircle = function(circle) {
+	var circleToCircle = function (circle) {
 		return new ploxfight.Circle(new ploxfight.Vector(circle.x, circle.y), circle.radius);
 	};
 

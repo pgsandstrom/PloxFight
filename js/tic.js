@@ -25,19 +25,21 @@
 
 	Tic.prototype.tic = function () {
 
-		this.handleControl();
+		this.handleControl(this.game.player);
+		ploxfight.ai(this.game, this.game.opponent);
 		this.updateBoard();
 	};
 
 	Tic.prototype.updateBoard = function () {
 		this.checkPlayerState(this.game.player);
+		this.checkPlayerState(this.game.opponent);
 		var collisionables = [];
 		collisionables.push(this.game.player);
 		collisionables.push(this.game.opponent);
 		collisionables.push.apply(collisionables, this.game.barrels);
-		for (var i = 0; i < collisionables.length;i++) {
+		for (var i = 0; i < collisionables.length; i++) {
 			var object1 = collisionables[i];
-			for (var j = i+1; j < collisionables.length; j++) {
+			for (var j = i + 1; j < collisionables.length; j++) {
 				var object2 = collisionables[j];
 				ploxfight.checkCollisions(object1, object2);
 			}
@@ -89,9 +91,9 @@
 		this.game.running = false;
 	};
 
-	Tic.prototype.handleControl = function () {
+	Tic.prototype.handleControl = function (player) {
 
-		if (this.game.player.height < ploxfight.HEIGHT_KILL_CONTROL) {
+		if (player.height < ploxfight.HEIGHT_KILL_CONTROL) {
 			return;
 		}
 
@@ -99,35 +101,20 @@
 		//var preY = game.player.y;
 
 		//player direction:
-		var xForce = ploxfight.mouseX - (ploxfight.canvasX + this.game.player.x);
-		var yForce = ploxfight.mouseY - (ploxfight.canvasY + this.game.player.y);
+		var xForce = ploxfight.mouseX - (ploxfight.canvasX + player.x);
+		var yForce = ploxfight.mouseY - (ploxfight.canvasY + player.y);
 		var degree = Math.atan2(xForce, yForce);
-		this.game.player.degree = degree;
+		player.degree = degree;
 
-		var playerSpeed = ploxfight.PLAYER_SPEED;
-		if ((ploxfight.key_forward || ploxfight.key_back) && (ploxfight.key_left || ploxfight.key_right)) {
-			playerSpeed = Math.sqrt((playerSpeed * playerSpeed) / 2);
-		}
+		var moves = {};
 
 		//player motion:
-		if (ploxfight.key_forward) {
-			this.movePlayer(xForce, yForce, playerSpeed);
-		}
-		if (ploxfight.key_back) {
-			this.movePlayer(-xForce, -yForce, playerSpeed);
-		}
-		if (ploxfight.key_left) {
-			var leftDegree = degree + Math.PI / 2;
-			var xForceLeft = Math.sin(leftDegree);
-			var yForceLeft = Math.cos(leftDegree);
-			this.movePlayer(xForceLeft, yForceLeft, playerSpeed);
-		}
-		if (ploxfight.key_right) {
-			var rightDegree = degree - Math.PI / 2;
-			var xForceRight = Math.sin(rightDegree);
-			var yForceRight = Math.cos(rightDegree);
-			this.movePlayer(xForceRight, yForceRight, playerSpeed);
-		}
+		moves[ploxfight.MOVE_FORWARD] = ploxfight.key_forward;
+		moves[ploxfight.MOVE_BACKWARD] = ploxfight.key_back;
+		moves[ploxfight.MOVE_LEFT] = ploxfight.key_left;
+		moves[ploxfight.MOVE_RIGHT] = ploxfight.key_right;
+
+		ploxfight.moveDude(player, moves);
 
 		//var postX = game.player.x;
 		//var postY = game.player.y;
@@ -137,27 +124,4 @@
 		//console.log("moved: " + totalMoved);
 	};
 
-	Tic.prototype.movePlayer = function (xForce, yForce, speed) {
-		var xAbs = Math.abs(xForce);
-		var yAbs = Math.abs(yForce);
-
-		var xQuota = xAbs / (xAbs + yAbs);
-		var yQuota = 1 - xQuota;
-
-		var xChange = xQuota;
-		if (xForce < 0) {
-			xChange *= -1;
-		}
-		var yChange = yQuota;
-		if (yForce < 0) {
-			yChange *= -1;
-		}
-
-		// We just multiply so it gets the length it is supposed to have
-		var achievedSpeed = Math.sqrt(yChange * yChange + xChange * xChange);
-		var adjust = speed / achievedSpeed;
-
-		this.game.player.x += xChange * adjust;
-		this.game.player.y += yChange * adjust;
-	};
 })();

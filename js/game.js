@@ -36,6 +36,7 @@
 
 		this.barrels = [];
 		this.barrels.push(new Barrel());
+		this.barrels.push(new Barrel());
 
 		var $canvas = $("#canvas");	//TODO move this stuff?
 		ploxfight.canvasX = $canvas.offset().left;
