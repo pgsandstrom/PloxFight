@@ -19,6 +19,8 @@
 	contextLayers.push(canvas_4.getContext('2d'));
 
 	var image_player = document.getElementById('player');
+	var image_player_hit = document.getElementById('player-hit');
+	var image_player_tumbling = document.getElementById('player-tumbling');
 	var image_tile1 = document.getElementById('tile-1');
 	var image_tile2 = document.getElementById('tile-2');
 	var image_tile3 = document.getElementById('tile-3');
@@ -97,11 +99,11 @@
 			}
 		}
 
-		this.renderDude(this.game.player, image_player, 1);
+		this.renderDude(this.game.player, 1);
 
 		for (var i = 0; i < this.game.opponents.length; i++) {
 			var dude = this.game.opponents[i];
-			this.renderDude(dude, image_player, i + 2);
+			this.renderDude(dude, i + 2);
 		}
 
 		for (var i = 0; i < this.game.barrels.length; i++) {
@@ -125,12 +127,20 @@
 	// "* 1.2" is to be safe with this ugly solution. A player can travel faster if he is being pushed and stuff like that
 	var DUDE_CLEAR_LENGTH = Math.sqrt(PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE + PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE) * 1.2;
 
-	Renderer.prototype.renderDude = function (dude, image, dudeIndex) {
+	Renderer.prototype.renderDude = function (dude, dudeIndex) {
 		var context = contextLayers[dudeIndex];
 		var x = dude.x - DUDE_CLEAR_LENGTH / 2;
 		var y = dude.y - DUDE_CLEAR_LENGTH / 2;
 		var width = DUDE_CLEAR_LENGTH;
 		var height = DUDE_CLEAR_LENGTH;
+
+		var image ;
+		if(dude.tumbleProgress <= 0) {
+			image = image_player;
+		} else {
+			image = image_player_tumbling;
+		}
+
 		context.clearRect(x, y, DUDE_CLEAR_LENGTH, DUDE_CLEAR_LENGTH);
 		renderObject(dude, image, PLAYER_IMAGE_SIZE, context);
 		fixImage(context, x, y, width, height, dudeIndex);
@@ -147,21 +157,29 @@
 		context.rotate(object.degree);
 		context.translate(-object.x, -object.y);
 
-		//var squareCorners = ploxfight.getSquareCorners(dude);
-		//for (var y = 0; y < squareCorners.length; y++) {
-		//	var first;
-		//	if (y === 0) {
-		//		first = squareCorners[squareCorners.length - 1];
-		//	} else {
-		//		first = squareCorners[y - 1];
-		//	}
-		//	var second = squareCorners[y];
-		//
-		//	context.beginPath();
-		//	context.moveTo(first.x, first.y);
-		//	context.lineTo(second.x, second.y);
-		//	context.stroke();
-		//}
+		//paintSquareBorder(context, object);
+		if (object.fistProgress > 0) {
+			paintSquareBorder(context, object.fist);
+
+		}
+	};
+
+	var paintSquareBorder = function (context, square) {
+		var squareCorners = ploxfight.getSquareCorners(square);
+		for (var y = 0; y < squareCorners.length; y++) {
+			var first;
+			if (y === 0) {
+				first = squareCorners[squareCorners.length - 1];
+			} else {
+				first = squareCorners[y - 1];
+			}
+			var second = squareCorners[y];
+
+			context.beginPath();
+			context.moveTo(first.x, first.y);
+			context.lineTo(second.x, second.y);
+			context.stroke();
+		}
 	};
 
 

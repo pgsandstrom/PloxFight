@@ -4,7 +4,12 @@
 
 	ploxfight.RENDER_TIC_TIME = 33;
 	ploxfight.GAME_TIC_TIME = 33;
+
 	ploxfight.PLAYER_SPEED = 6;
+	ploxfight.TUMBLE_SPEED = 12;
+	ploxfight.FIST_TIME = 300;
+	ploxfight.TUMBLE_TIME = 300;
+
 	ploxfight.BOARD_SIZE = 10;
 	ploxfight.TILE_SIZE = 50;
 	ploxfight.TILE_HEIGHT = 100;	//the board is at height 0, the water is at -100
@@ -14,6 +19,7 @@
 	ploxfight.key_left = false;
 	ploxfight.key_right = false;
 	ploxfight.key_back = false;
+	ploxfight.key_hit = false;
 
 	ploxfight.mouseX = 0;
 	ploxfight.mouseY = 0;
@@ -24,18 +30,19 @@
 	$(function () {
 		// Fugly wait for images to load
 		setTimeout(function () {
-			var game = new Game();
+			ploxfight.game = new Game();
 		}, 100);
 	});
 
 
 	ploxfight.Game = function Game() {
+		this.playerIdGenerator = 0;
 		this.running = true;
-		this.board = newBoard();
-		this.player = newPlayer();
+		this.board = this.newBoard();
+		this.player = this.newPlayer();
 		this.opponents = [];
-		this.opponents.push(newOpponent());
-		this.opponents.push(newOpponent());
+		this.opponents.push(this.newOpponent());
+		//this.opponents.push(this.newOpponent());
 
 		this.barrels = [];
 		this.barrels.push(new Barrel());
@@ -56,7 +63,7 @@
 
 	var Game = ploxfight.Game;
 
-	var newBoard = function () {
+	Game.prototype.newBoard = function () {
 		var board = [];
 
 		for (var y = 0; y < ploxfight.BOARD_SIZE; y++) {
@@ -84,15 +91,17 @@
 		}
 	};
 
-	var newPlayer = function () {
-		return new Player(75, 75);
+	Game.prototype.newPlayer = function () {
+		return new Player(this.playerIdGenerator++, 75, 75);
 	};
 
-	var newOpponent = function () {
-		return new Player(425, 425);
+	Game.prototype.newOpponent = function () {
+		return new Player(this.playerIdGenerator++, 425, 425);
 	};
 
-	ploxfight.Player = function Player(x, y) {
+	ploxfight.Player = function Player(id, x, y) {
+		this.type = "dude";
+		this.id = id;
 		this.health = 100;
 		this.height = 0;
 		this.degree = 0;
@@ -101,18 +110,24 @@
 		this.shape = ploxfight.shape.SQUARE;
 		this.shapeWidth = 50;
 		this.shapeHeight = 20;
+		this.pushability = 100;
+
+		this.fistProgress = 0;
+		this.tumbleProgress = 0;
 	};
 
 	var Player = ploxfight.Player;
 
 	ploxfight.Barrel = function Barrel(x, y) {
+		this.type = "barrel";
 		this.health = 100;
 		this.height = 0;
 		this.degree = 0;
-		this.x = x !== undefined ? x : Math.floor(75 + Math.random() * 100);
-		this.y = y !== undefined ? y : Math.floor(75 + Math.random() * 100);
+		this.x = x !== undefined ? x : Math.floor(75 + Math.random() * 225);
+		this.y = y !== undefined ? y : Math.floor(75 + Math.random() * 225);
 		this.shape = ploxfight.shape.CIRCLE;
 		this.radius = 25;
+		this.pushability = 100;
 	};
 
 	var Barrel = ploxfight.Barrel;

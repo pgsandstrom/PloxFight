@@ -18,19 +18,15 @@
 	var response = new ploxfight.Response();
 
 	ploxfight.checkCollisions = function (object1, object2) {
-		//// I don't know why I need to double vector size here...
-		//var playerVectors = ploxfight.getSquareVectors(object1, true);
-		//var opponentVectors = ploxfight.getSquareVectors(object2, true);
-		//
-		//var playerPolygon = new ploxfight.Polygon(new ploxfight.Vector(object1.x, object1.y), playerVectors);
-		//var opponentPolygon = new ploxfight.Polygon(new ploxfight.Vector(object2.x, object2.y), opponentVectors);
-		//
-		//response.clear();
-		//var collision = testPolygonPolygon(playerPolygon, opponentPolygon, response);
-		//if (collision) {
-		//	object2.x += response.overlapV.x;
-		//	object2.y += response.overlapV.y;
-		//}
+
+		//checks:
+		if (object1.shape === undefined || object2.shape === undefined) {
+			throw Error("fuuuu");
+		}
+
+		if (object1.id !== undefined && object1.id === object2.id) {
+			return;
+		}
 
 		response.clear();
 		var collision;
@@ -53,13 +49,46 @@
 			collision = testCircleCircle(circle1, circle2, response);
 		}
 
-
 		if (collision) {
-			object1.x -= response.overlapV.x / 1.5;
-			object1.y -= response.overlapV.y / 1.5;
-			object2.x += response.overlapV.x;
-			object2.y += response.overlapV.y;
+			if (object1.type === "fist" && object2.type === "dude") {
+				handlePunch(object2, object1);
+			} else if (object1.type === "fist" && object2.type === "dude") {
+				handlePunch(object1, object2);
+			} else {
+				handleCollision(object1, object2);
+			}
 		}
+	};
+
+	var handlePunch = function (dude, fist) {
+		dude.tumbleProgress = ploxfight.TUMBLE_TIME;
+		dude.degree = fist.degree;
+	};
+
+	var handleCollision = function (object1, object2) {
+		var object1ratio;
+		var object2ratio;
+
+		if (object1.pushability === 0) {
+			if (object2.pushability === 0) {
+				object1ratio = 0.5;
+				object2ratio = 0.5;
+			} else {
+				object1ratio = 0;
+				object2ratio = 1;
+			}
+		} else if (object2.pushability === 0) {
+			object1ratio = 1;
+			object2ratio = 0;
+		} else {
+			object1ratio = object1.pushability / (object1.pushability + object2.pushability);
+			object2ratio = 1 - object1ratio;
+		}
+
+		object1.x -= response.overlapV.x * object1ratio;
+		object1.y -= response.overlapV.y * object1ratio;
+		object2.x += response.overlapV.x * object2ratio;
+		object2.y += response.overlapV.y * object2ratio;
 	};
 
 	var squareToPolygon = function (square) {

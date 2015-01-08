@@ -10,6 +10,10 @@
 			return;
 		}
 
+		if (dude.tumbleProgress > 0) {
+			return;
+		}
+
 		var xForce = game.player.x - (ploxfight.canvasX + dude.x);
 		var yForce = game.player.y - (ploxfight.canvasY + dude.y);
 		var degree = Math.atan2(xForce, yForce);
@@ -24,7 +28,7 @@
 			temp--;
 		}
 
-		ploxfight.moveDude(dude, moves);
+		ploxfight.updateDude(dude, moves);
 	};
 
 })();

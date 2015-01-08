@@ -6,11 +6,43 @@
 	ploxfight.MOVE_BACKWARD = "MOVE_BACKWARD";
 	ploxfight.MOVE_LEFT = "MOVE_LEFT";
 	ploxfight.MOVE_RIGHT = "MOVE_RIGHT";
+	ploxfight.HIT = "HIT";
 
+	ploxfight.getFist = function (dude) {	//TODO: move this function?
+		var xForce = Math.sin(dude.degree);
+		var yForce = Math.cos(dude.degree);
 
-	ploxfight.moveDude = function (dude, moves) {
+		var fist = {
+			type: "fist",
+			id: dude.id,
+			degree: dude.degree,
+			x: dude.x,
+			y: dude.y,
+			shape: ploxfight.shape.SQUARE,
+			shapeWidth: 10,
+			shapeHeight: dude.shapeHeight,
+			pushability: 0
+		};
+
+		// move to front of character:
+		ploxfight.performMove(fist, xForce, yForce, dude.shapeHeight);
+
+		// shift slightly to the right::
+		var rightDegree = dude.degree - Math.PI / 2;
+		var xForceRight = Math.sin(rightDegree);
+		var yForceRight = Math.cos(rightDegree);
+		ploxfight.performMove(fist, xForceRight, yForceRight, 10);
+
+		return fist;
+	};
+
+	ploxfight.updateDude = function (dude, moves) {
 
 		if (dude.height < ploxfight.HEIGHT_KILL_CONTROL) {
+			return;
+		}
+
+		if(dude.tumbleProgress > 0) {
 			return;
 		}
 
@@ -24,26 +56,30 @@
 		}
 
 		if (moves[ploxfight.MOVE_FORWARD]) {
-			performMove(dude, xForce, yForce, playerSpeed);
+			ploxfight.performMove(dude, xForce, yForce, playerSpeed);
 		}
 		if (moves[ploxfight.MOVE_BACKWARD]) {
-			performMove(dude, -xForce, -yForce, playerSpeed);
+			ploxfight.performMove(dude, -xForce, -yForce, playerSpeed);
 		}
 		if (moves[ploxfight.MOVE_LEFT]) {
 			var leftDegree = dude.degree + Math.PI / 2;
 			var xForceLeft = Math.sin(leftDegree);
 			var yForceLeft = Math.cos(leftDegree);
-			performMove(dude, xForceLeft, yForceLeft, playerSpeed);
+			ploxfight.performMove(dude, xForceLeft, yForceLeft, playerSpeed);
 		}
 		if (moves[ploxfight.MOVE_RIGHT]) {
 			var rightDegree = dude.degree - Math.PI / 2;
 			var xForceRight = Math.sin(rightDegree);
 			var yForceRight = Math.cos(rightDegree);
-			performMove(dude, xForceRight, yForceRight, playerSpeed);
+			ploxfight.performMove(dude, xForceRight, yForceRight, playerSpeed);
+		}
+
+		if (moves[ploxfight.HIT] && dude.fistProgress <= 0) {
+			dude.fistProgress = ploxfight.FIST_TIME;
 		}
 	};
 
-	var performMove = function (dude, xForce, yForce, speed) {
+	ploxfight.performMove = function (object, xForce, yForce, speed) {
 		var xAbs = Math.abs(xForce);
 		var yAbs = Math.abs(yForce);
 
@@ -63,12 +99,18 @@
 		var achievedSpeed = Math.sqrt(yChange * yChange + xChange * xChange);
 		var adjust = speed / achievedSpeed;
 
-		dude.x += xChange * adjust;
-		dude.y += yChange * adjust;
+		object.x += xChange * adjust;
+		object.y += yChange * adjust;
 	};
 
 	ploxfight.startControl = function () {
 
+		$(document).click(function (event) {
+			ploxfight.key_hit = true;
+		});
+
+		ploxfight.mouseX = 300;
+		ploxfight.mouseY = 300;
 		$(document).mousemove(function (event) {
 			ploxfight.mouseX = event.pageX;
 			ploxfight.mouseY = event.pageY;

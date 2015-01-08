@@ -42,6 +42,7 @@
 	Tic.prototype.tic = function () {
 
 		this.handleControl(this.game.player);
+		this.resetControl(this.game.player);
 		for (var i = 0; i < this.game.opponents.length; i++) {
 			var dude = this.game.opponents[i];
 			ploxfight.ai(this.game, dude);
@@ -90,21 +91,35 @@
 
 	};
 
-	Tic.prototype.checkPlayerState = function (player) {
-		if (player.height <= -ploxfight.TILE_HEIGHT) {
-			this.dudeDeath(player);
+	Tic.prototype.checkPlayerState = function (dude) {
+		if (dude.height <= -ploxfight.TILE_HEIGHT) {
+			this.dudeDeath(dude);
 		}
 
-		var tile = this.game.board[(player.y / ploxfight.TILE_SIZE) | 0][(player.x / ploxfight.TILE_SIZE) | 0];
+		// update the tile the dude is standing on:
+		var tile = this.game.board[(dude.y / ploxfight.TILE_SIZE) | 0][(dude.x / ploxfight.TILE_SIZE) | 0];
 		if (tile.breaking <= 0) {
-			this.objectFall(player);
+			this.objectFall(dude);
 		} else {
 			if (tile.health > 0) {
-				tile.health -= 10;
+				//tile.health -= 10;
 			}
-			if (tile.breaking > 0 && player.height < 0) {	// Abort falling
-				player.height = 0;
+			if (tile.breaking > 0 && dude.height < 0) {	// Abort falling
+				dude.height = 0;
 			}
+		}
+
+		if (dude.fistProgress > 0) {
+			dude.fistProgress -= ploxfight.GAME_TIC_TIME;
+			dude.fist = ploxfight.getFist(dude);
+		}
+
+		if (dude.tumbleProgress > 0) {
+			dude.tumbleProgress -= ploxfight.GAME_TIC_TIME;
+			var xForce = Math.sin(dude.degree);
+			var yForce = Math.cos(dude.degree);
+			var speed = ploxfight.TUMBLE_SPEED
+			ploxfight.performMove(dude, xForce, yForce, speed);
 		}
 	};
 
@@ -143,8 +158,9 @@
 		moves[ploxfight.MOVE_BACKWARD] = ploxfight.key_back;
 		moves[ploxfight.MOVE_LEFT] = ploxfight.key_left;
 		moves[ploxfight.MOVE_RIGHT] = ploxfight.key_right;
+		moves[ploxfight.HIT] = ploxfight.key_hit;
 
-		ploxfight.moveDude(player, moves);
+		ploxfight.updateDude(player, moves);
 
 		//var postX = game.player.x;
 		//var postY = game.player.y;
@@ -154,10 +170,18 @@
 		//console.log("moved: " + totalMoved);
 	};
 
+	Tic.prototype.resetControl = function (player) {
+		ploxfight.key_hit = false;
+	};
+
 	Tic.prototype.updateCollisions = function () {
 		var collisionables = [];
-		collisionables.push(this.game.player);
-		collisionables.push.apply(collisionables, this.game.opponents);
+
+		this.addPlayerCollision(collisionables, this.game.player);
+		for (var i = 0; i < this.game.opponents.length; i++) {
+			this.addPlayerCollision(collisionables, this.game.opponents[i]);
+		}
+
 		collisionables.push.apply(collisionables, this.game.barrels);
 		for (var i = 0; i < collisionables.length; i++) {
 			var object1 = collisionables[i];
@@ -166,6 +190,14 @@
 				ploxfight.checkCollisions(object1, object2);
 			}
 		}
-	}
+	};
+
+	Tic.prototype.addPlayerCollision = function (collisionables, dude) {
+		collisionables.push(dude);
+
+		if (dude.fistProgress > 0) {
+			collisionables.push(dude.fist);
+		}
+	};
 
 })();
