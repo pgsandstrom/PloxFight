@@ -2,7 +2,11 @@
 	"use strict";
 	var ploxfight = window.ploxfight = window.ploxfight || {};
 
-	var temp = 50;
+	var HIT_FREQUENCY = 1200;
+
+	var waitTime = 2000;
+	var hitTimer = HIT_FREQUENCY;
+
 
 	ploxfight.ai = function (game, dude) {
 
@@ -22,10 +26,17 @@
 		var moves = {};
 
 		//player motion:
-		if (temp === 0) {
+		if (waitTime <= 0) {
 			moves[ploxfight.MOVE_FORWARD] = true;
 		} else {
-			temp--;
+			waitTime -= ploxfight.GAME_TIC_TIME;
+		}
+
+		if (hitTimer <= 0) {
+			moves[ploxfight.MOVE_HIT] = true;
+			hitTimer = HIT_FREQUENCY;
+		} else {
+			hitTimer -= ploxfight.GAME_TIC_TIME;
 		}
 
 		ploxfight.updateDude(dude, moves);

@@ -118,7 +118,7 @@
 			dude.tumbleProgress -= ploxfight.GAME_TIC_TIME;
 			var xForce = Math.sin(dude.degree);
 			var yForce = Math.cos(dude.degree);
-			var speed = ploxfight.TUMBLE_SPEED
+			var speed = ploxfight.TUMBLE_SPEED;
 			ploxfight.performMove(dude, xForce, yForce, speed);
 		}
 	};
@@ -142,6 +142,10 @@
 			return;
 		}
 
+		if (player.tumbleProgress > 0) {
+			return;
+		}
+
 		//var preX = game.player.x;
 		//var preY = game.player.y;
 
@@ -158,7 +162,7 @@
 		moves[ploxfight.MOVE_BACKWARD] = ploxfight.key_back;
 		moves[ploxfight.MOVE_LEFT] = ploxfight.key_left;
 		moves[ploxfight.MOVE_RIGHT] = ploxfight.key_right;
-		moves[ploxfight.HIT] = ploxfight.key_hit;
+		moves[ploxfight.MOVE_HIT] = ploxfight.key_hit;
 
 		ploxfight.updateDude(player, moves);
 

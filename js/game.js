@@ -10,7 +10,7 @@
 	ploxfight.FIST_TIME = 300;
 	ploxfight.TUMBLE_TIME = 300;
 
-	ploxfight.BOARD_SIZE = 10;
+	ploxfight.BOARD_SIZE = 12;
 	ploxfight.TILE_SIZE = 50;
 	ploxfight.TILE_HEIGHT = 100;	//the board is at height 0, the water is at -100
 	ploxfight.HEIGHT_KILL_CONTROL = -12;	//the board is at height 0, the water is at -100
@@ -70,7 +70,7 @@
 			var row = [];
 			board.push(row);
 			for (var x = 0; x < ploxfight.BOARD_SIZE; x++) {
-				if (y === 0 || y === ploxfight.BOARD_SIZE - 1 || x === 0 || x === ploxfight.BOARD_SIZE - 1) {
+				if (y < 2 || y > ploxfight.BOARD_SIZE - 3 || x < 2 || x > ploxfight.BOARD_SIZE - 3) {
 					row.push(newTile(0));
 				} else {
 					row.push(newTile());
@@ -92,7 +92,7 @@
 	};
 
 	Game.prototype.newPlayer = function () {
-		return new Player(this.playerIdGenerator++, 75, 75);
+		return new Player(this.playerIdGenerator++, 175, 175);
 	};
 
 	Game.prototype.newOpponent = function () {
@@ -123,8 +123,8 @@
 		this.health = 100;
 		this.height = 0;
 		this.degree = 0;
-		this.x = x !== undefined ? x : Math.floor(75 + Math.random() * 225);
-		this.y = y !== undefined ? y : Math.floor(75 + Math.random() * 225);
+		this.x = x !== undefined ? x : Math.floor(125 + Math.random() * 375);
+		this.y = y !== undefined ? y : Math.floor(125 + Math.random() * 375);
 		this.shape = ploxfight.shape.CIRCLE;
 		this.radius = 25;
 		this.pushability = 100;

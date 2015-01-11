@@ -6,7 +6,7 @@
 	ploxfight.MOVE_BACKWARD = "MOVE_BACKWARD";
 	ploxfight.MOVE_LEFT = "MOVE_LEFT";
 	ploxfight.MOVE_RIGHT = "MOVE_RIGHT";
-	ploxfight.HIT = "HIT";
+	ploxfight.MOVE_HIT = "MOVE_HIT";
 
 	ploxfight.getFist = function (dude) {	//TODO: move this function?
 		var xForce = Math.sin(dude.degree);
@@ -74,7 +74,7 @@
 			ploxfight.performMove(dude, xForceRight, yForceRight, playerSpeed);
 		}
 
-		if (moves[ploxfight.HIT] && dude.fistProgress <= 0) {
+		if (moves[ploxfight.MOVE_HIT] && dude.fistProgress <= 0) {
 			dude.fistProgress = ploxfight.FIST_TIME;
 		}
 	};

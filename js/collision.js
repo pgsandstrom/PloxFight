@@ -52,7 +52,7 @@
 		if (collision) {
 			if (object1.type === "fist" && object2.type === "dude") {
 				handlePunch(object2, object1);
-			} else if (object1.type === "fist" && object2.type === "dude") {
+			} else if (object1.type === "dude" && object2.type === "fist") {
 				handlePunch(object1, object2);
 			} else {
 				handleCollision(object1, object2);
@@ -61,6 +61,7 @@
 	};
 
 	var handlePunch = function (dude, fist) {
+		console.log("dude had " + dude.degree + " and got " + fist.degree);
 		dude.tumbleProgress = ploxfight.TUMBLE_TIME;
 		dude.degree = fist.degree;
 	};
