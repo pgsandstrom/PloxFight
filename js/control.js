@@ -107,6 +107,13 @@
 
 		$(document).click(function (event) {
 			ploxfight.key_hit = true;
+			event.preventDefault();
+			return false;
+		});
+
+		$(document).dblclick(function (event) {
+			event.preventDefault();
+			return false;
 		});
 
 		ploxfight.mouseX = 300;

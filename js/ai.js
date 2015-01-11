@@ -18,8 +18,10 @@
 			return;
 		}
 
-		var xForce = game.player.x - (ploxfight.canvasX + dude.x);
-		var yForce = game.player.y - (ploxfight.canvasY + dude.y);
+		//var xForce = game.player.x - (ploxfight.canvasX + dude.x);
+		//var yForce = game.player.y - (ploxfight.canvasY + dude.y);
+		var xForce = game.player.x - dude.x;
+		var yForce = game.player.y - dude.y;
 		var degree = Math.atan2(xForce, yForce);
 		dude.degree = degree;
 

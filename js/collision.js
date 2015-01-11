@@ -61,7 +61,6 @@
 	};
 
 	var handlePunch = function (dude, fist) {
-		console.log("dude had " + dude.degree + " and got " + fist.degree);
 		dude.tumbleProgress = ploxfight.TUMBLE_TIME;
 		dude.degree = fist.degree;
 	};

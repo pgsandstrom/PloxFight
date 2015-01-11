@@ -30,12 +30,16 @@
 	$(function () {
 		// Fugly wait for images to load
 		setTimeout(function () {
-			ploxfight.game = new Game();
+			ploxfight.prepareImages();
+			setTimeout(function () {
+				ploxfight.game = ploxfight.gameTest();
+			}, 250);
 		}, 100);
 	});
 
 
-	ploxfight.Game = function Game() {
+	ploxfight.Game = function Game(eventTrigger) {
+		this.eventTrigger = eventTrigger;
 		this.playerIdGenerator = 0;
 		this.running = true;
 		this.board = this.newBoard();
@@ -45,8 +49,8 @@
 		//this.opponents.push(this.newOpponent());
 
 		this.barrels = [];
-		this.barrels.push(new Barrel());
-		this.barrels.push(new Barrel());
+		this.barrels.push(new ploxfight.Barrel());
+		this.barrels.push(new ploxfight.Barrel());
 
 		var $canvas = $("#canvas");	//TODO move this stuff?
 		ploxfight.canvasX = $canvas.offset().left;

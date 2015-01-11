@@ -5,6 +5,7 @@
 
 	ploxfight.Tic = function Tic(game) {
 		this.game = game;
+		this.ticCount = 0;
 	};
 
 	var Tic = ploxfight.Tic;
@@ -40,6 +41,10 @@
 	//};
 
 	Tic.prototype.tic = function () {
+
+		this.ticCount++;
+
+		this.game.eventTrigger(this.game);
 
 		this.handleControl(this.game.player);
 		this.resetControl(this.game.player);

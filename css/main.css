@@ -5,3 +5,16 @@
 canvas {
 	position: fixed;
 }
+
+#canvas-temp {
+	display: none;
+}
+
+.test {
+	height: 50px;
+	width: 50px;
+}
+
+body {
+	/*background: red;*/
+}

@@ -7,20 +7,17 @@
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext('2d');
 
-	var canvas_1 = document.getElementById('canvas-1');
-	var canvas_2 = document.getElementById('canvas-2');
-	var canvas_3 = document.getElementById('canvas-3');
-	var canvas_4 = document.getElementById('canvas-4');
-
-	var contextLayers = [];
-	contextLayers.push(canvas_1.getContext('2d'));
-	contextLayers.push(canvas_2.getContext('2d'));
-	contextLayers.push(canvas_3.getContext('2d'));
-	contextLayers.push(canvas_4.getContext('2d'));
-
 	var image_player = document.getElementById('player');
 	var image_player_hit = document.getElementById('player-hit');
 	var image_player_tumbling = document.getElementById('player-tumbling');
+	//var image_opponent = document.getElementById('opponent');
+	//var image_opponent_hit = document.getElementById('opponent-hit');
+	//var image_opponent_tumbling = document.getElementById('opponent-tumbling');
+	var image_opponent;
+	var image_opponent_hit;
+	var image_opponent_tumbling;
+
+
 	var image_tile1 = document.getElementById('tile-1');
 	var image_tile2 = document.getElementById('tile-2');
 	var image_tile3 = document.getElementById('tile-3');
@@ -92,7 +89,7 @@
 						y: (y + 0.5) * ploxfight.TILE_SIZE,
 						height: tile.height
 					};
-					renderObject(object, image_tile_falling_1, ploxfight.TILE_SIZE, context);
+					renderObject(object, image_tile_falling_1, ploxfight.TILE_SIZE);
 				} else {
 					context.drawImage(image_water, x * ploxfight.TILE_SIZE, y * ploxfight.TILE_SIZE);
 				}
@@ -121,32 +118,27 @@
 	};
 
 	Renderer.prototype.renderBarrel = function (barrel) {
-		renderObject(barrel, image_barrel, BARREL_IMAGE_SIZE, context);
+		renderObject(barrel, image_barrel, BARREL_IMAGE_SIZE);
 	};
-
-	// "* 1.2" is to be safe with this ugly solution. A player can travel faster if he is being pushed and stuff like that
-	var DUDE_CLEAR_LENGTH = Math.sqrt(PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE + PLAYER_IMAGE_SIZE * PLAYER_IMAGE_SIZE) * 1.2;
-
 	Renderer.prototype.renderDude = function (dude, dudeIndex) {
-		var context = contextLayers[dudeIndex];
-		var x = dude.x - DUDE_CLEAR_LENGTH / 2;
-		var y = dude.y - DUDE_CLEAR_LENGTH / 2;
-		var width = DUDE_CLEAR_LENGTH;
-		var height = DUDE_CLEAR_LENGTH;
-
-		var image ;
-		if(dude.tumbleProgress <= 0) {
-			image = image_player;
+		var image;
+		if (dude.tumbleProgress <= 0) {
+			if (dude.id === 0) {
+				image = image_player;
+			} else {
+				image = image_opponent;
+			}
 		} else {
-			image = image_player_tumbling;
+			if (dude.id === 0) {
+				image = image_player_tumbling;
+			} else {
+				image = image_opponent_tumbling;
+			}
 		}
-
-		context.clearRect(x, y, DUDE_CLEAR_LENGTH, DUDE_CLEAR_LENGTH);
-		renderObject(dude, image, PLAYER_IMAGE_SIZE, context);
-		fixImage(context, x, y, width, height, dudeIndex);
+		renderObject(dude, image, PLAYER_IMAGE_SIZE);
 	};
 
-	var renderObject = function (object, image, imageSize, context) {
+	var renderObject = function (object, image, imageSize) {
 		context.translate(object.x, object.y);
 		context.rotate(-object.degree);
 		var scale = ((object.height + ploxfight.TILE_HEIGHT) / ploxfight.TILE_HEIGHT);
@@ -157,14 +149,14 @@
 		context.rotate(object.degree);
 		context.translate(-object.x, -object.y);
 
-		//paintSquareBorder(context, object);
+		//paintSquareBorder(object);
 		if (object.fistProgress > 0) {
-			paintSquareBorder(context, object.fist);
+			paintSquareBorder(object.fist);
 
 		}
 	};
 
-	var paintSquareBorder = function (context, square) {
+	var paintSquareBorder = function (square) {
 		var squareCorners = ploxfight.getSquareCorners(square);
 		for (var y = 0; y < squareCorners.length; y++) {
 			var first;
@@ -181,7 +173,6 @@
 			context.stroke();
 		}
 	};
-
 
 	function fixImage(context, x, y, width, height, filter) {
 
@@ -214,4 +205,32 @@
 		//timeInMs = Date.now() - timeInMs;
 		//console.log(timeInMs);
 	}
+
+	//TODO: If the page takes a long time to load, then image_player_tumbling will show. If it loads quickly, it wont show
+	ploxfight.prepareImages = function () {
+		var canvasTemp = document.getElementById('canvas-temp');
+		var contextTemp = canvasTemp.getContext('2d');
+		var data;
+
+		contextTemp.drawImage(image_player, 0, 0, 50, 50);
+		fixImage(contextTemp, 0, 0, 50, 50, 2);
+		data = canvasTemp.toDataURL();
+		image_opponent = new Image();
+		image_opponent.src = data;
+		contextTemp.clearRect(0, 0, 50, 50);
+
+		contextTemp.drawImage(image_player_hit, 0, 0, 50, 50);
+		fixImage(contextTemp, 0, 0, 50, 50, 2);
+		data = canvasTemp.toDataURL();
+		image_opponent_hit = new Image();
+		image_opponent_hit.src = data;
+		contextTemp.clearRect(0, 0, 50, 50);
+
+		contextTemp.drawImage(image_player_tumbling, 0, 0, 50, 50);
+		fixImage(contextTemp, 0, 0, 50, 50, 2);
+		data = canvasTemp.toDataURL();
+		image_opponent_tumbling = new Image();
+		image_opponent_tumbling.src = data;
+		contextTemp.clearRect(0, 0, 50, 50);
+	};
 })();
