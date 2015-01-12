@@ -1,16 +1,16 @@
 (function () {
 	"use strict";
 	var ploxfight = window.ploxfight = window.ploxfight || {};
-	ploxfight.shape = ploxfight.shape || {};
 
+	ploxfight.shape = ploxfight.shape || {};
 	ploxfight.shape.SQUARE = "SQUARE";
 	ploxfight.shape.CIRCLE = "CIRCLE";
 
-	//ploxfight.getDistance = function (x1, y1, x2, y2) {
-	//	var xDiff = Math.abs(x1 - x2);
-	//	var yDiff = Math.abs(y1 - y2);
-	//	return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-	//};
+	ploxfight.getDistance = function (x1, y1, x2, y2) {
+		var xDiff = Math.abs(x1 - x2);
+		var yDiff = Math.abs(y1 - y2);
+		return Math.sqrt(xDiff * xDiff + yDiff * yDiff);
+	};
 
 	// Collision logic taken from here: http://jsfiddle.net/ARTsinn/FpEZf/
 	// If the link is dead, just check fullCollisionStuffExample.js
@@ -106,7 +106,7 @@
 	 *
 	 * @param {Polygon} polygon The polygon.
 	 * @param {Circle} circle The circle.
-	 * @param {Response=} response Response object (optional) that will be populated if
+	 * @param {ploxfight.Response} response Response object (optional) that will be populated if
 	 *   they interset.
 	 * @return {boolean} true if they intersect, false if they don't.
 	 */
@@ -255,7 +255,7 @@
 	 *
 	 * @param {Circle} circle The circle.
 	 * @param {Polygon} polygon The polygon.
-	 * @param {Response} response Response object (optional) that will be populated if
+	 * @param {ploxfight.Response} response Response object (optional) that will be populated if
 	 *   they interset.
 	 * @return {boolean} true if they intersect, false if they don't.
 	 */
@@ -319,7 +319,7 @@
 	 *
 	 * @param {Circle} a The first circle.
 	 * @param {Circle} b The second circle.
-	 * @param {Response=} response Response object (optional) that will be populated if
+	 * @param {ploxfight.Response=} response Response object (optional) that will be populated if
 	 *   the circles intersect.
 	 * @return {boolean} true if the circles intersect, false if they don't.
 	 */
@@ -356,7 +356,7 @@
 	 *
 	 * @param {Polygon} a The first polygon.
 	 * @param {Polygon} b The second polygon.
-	 * @param {Response} response Response object (optional) that will be populated if
+	 * @param {ploxfight.Response} response Response object (optional) that will be populated if
 	 *   they interset.
 	 * @return {boolean} true if they intersect, false if they don't.
 	 */
@@ -551,6 +551,23 @@
 			}
 		];
 
+	};
+
+	ploxfight.getSquareLines = function (square) {
+		var squareCorners = ploxfight.getSquareCorners(square);
+
+		var result = [];
+		for (var y = 0; y < squareCorners.length; y++) {
+			var first;
+			if (y === 0) {
+				first = squareCorners[squareCorners.length - 1];
+			} else {
+				first = squareCorners[y - 1];
+			}
+			var second = squareCorners[y];
+			result.push(new ploxfight.Line(first, second));
+		}
+		return result;
 	};
 
 	ploxfight.rotateX = function (x, y, degree) {

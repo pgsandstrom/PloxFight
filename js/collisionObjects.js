@@ -260,4 +260,17 @@
 		return this;
 	};
 
+	var Line = function (start, end) {
+		this.start = start;
+		this.end = end;
+	};
+	ploxfight.Line = Line;
+
+	ploxfight.getPoint = function (x, y) {
+		return {
+			x: x,
+			y: y
+		}
+	}
+
 })();

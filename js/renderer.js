@@ -149,7 +149,7 @@
 		context.rotate(object.degree);
 		context.translate(-object.x, -object.y);
 
-		//paintSquareBorder(object);
+		paintSquareBorder(object);
 		if (object.fistProgress > 0) {
 			paintSquareBorder(object.fist);
 
@@ -157,19 +157,12 @@
 	};
 
 	var paintSquareBorder = function (square) {
-		var squareCorners = ploxfight.getSquareCorners(square);
-		for (var y = 0; y < squareCorners.length; y++) {
-			var first;
-			if (y === 0) {
-				first = squareCorners[squareCorners.length - 1];
-			} else {
-				first = squareCorners[y - 1];
-			}
-			var second = squareCorners[y];
-
+		var lines = ploxfight.getSquareLines(square);
+		for (var i = 0; i < lines.length; i++) {
+			var line = lines[i];
 			context.beginPath();
-			context.moveTo(first.x, first.y);
-			context.lineTo(second.x, second.y);
+			context.moveTo(line.start.x, line.start.y);
+			context.lineTo(line.end.x, line.end.y);
 			context.stroke();
 		}
 	};
