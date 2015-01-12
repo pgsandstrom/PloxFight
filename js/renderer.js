@@ -136,6 +136,11 @@
 			}
 		}
 		renderObject(dude, image, PLAYER_IMAGE_SIZE);
+
+		if (dude.bullet !== undefined && dude.bullet.active) {
+			renderBullet(dude.bullet);
+		}
+
 	};
 
 	var renderObject = function (object, image, imageSize) {
@@ -154,6 +159,13 @@
 			paintSquareBorder(object.fist);
 
 		}
+	};
+
+	var renderBullet = function (bullet) {
+		context.beginPath();
+		context.moveTo(bullet.x, bullet.y);
+		context.lineTo(bullet.endX, bullet.endY);
+		context.stroke();
 	};
 
 	var paintSquareBorder = function (square) {
@@ -199,7 +211,7 @@
 		//console.log(timeInMs);
 	}
 
-	//TODO: If the page takes a long time to load, then image_player_tumbling will show. If it loads quickly, it wont show
+	//TODO: This will bug out if not all images have loaded when we do this
 	ploxfight.prepareImages = function () {
 		var canvasTemp = document.getElementById('canvas-temp');
 		var contextTemp = canvasTemp.getContext('2d');

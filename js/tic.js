@@ -119,6 +119,11 @@
 			dude.fist = ploxfight.getFist(dude);
 		}
 
+		if (dude.bullet != undefined && dude.bullet.active) {
+			//TODO: låt bullets vara fristående från karaktären
+			dude.bullet.update();
+		}
+
 		if (dude.tumbleProgress > 0) {
 			dude.tumbleProgress -= ploxfight.GAME_TIC_TIME;
 			var xForce = Math.sin(dude.degree);

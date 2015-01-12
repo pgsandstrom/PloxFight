@@ -5,6 +5,7 @@
 	ploxfight.shape = ploxfight.shape || {};
 	ploxfight.shape.SQUARE = "SQUARE";
 	ploxfight.shape.CIRCLE = "CIRCLE";
+	ploxfight.shape.LINE = "LINE";
 
 	ploxfight.getDistance = function (x1, y1, x2, y2) {
 		var xDiff = Math.abs(x1 - x2);

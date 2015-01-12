@@ -8,41 +8,13 @@
 	ploxfight.MOVE_RIGHT = "MOVE_RIGHT";
 	ploxfight.MOVE_HIT = "MOVE_HIT";
 
-	ploxfight.getFist = function (dude) {	//TODO: move this function?
-		var xForce = Math.sin(dude.degree);
-		var yForce = Math.cos(dude.degree);
-
-		var fist = {
-			type: "fist",
-			id: dude.id,
-			degree: dude.degree,
-			x: dude.x,
-			y: dude.y,
-			shape: ploxfight.shape.SQUARE,
-			shapeWidth: 10,
-			shapeHeight: dude.shapeHeight,
-			pushability: 0
-		};
-
-		// move to front of character:
-		ploxfight.performMove(fist, xForce, yForce, dude.shapeHeight);
-
-		// shift slightly to the right::
-		var rightDegree = dude.degree - Math.PI / 2;
-		var xForceRight = Math.sin(rightDegree);
-		var yForceRight = Math.cos(rightDegree);
-		ploxfight.performMove(fist, xForceRight, yForceRight, 10);
-
-		return fist;
-	};
-
 	ploxfight.updateDude = function (dude, moves) {
 
 		if (dude.height < ploxfight.HEIGHT_KILL_CONTROL) {
 			return;
 		}
 
-		if(dude.tumbleProgress > 0) {
+		if (dude.tumbleProgress > 0) {
 			return;
 		}
 
@@ -75,7 +47,8 @@
 		}
 
 		if (moves[ploxfight.MOVE_HIT] && dude.fistProgress <= 0) {
-			dude.fistProgress = ploxfight.FIST_TIME;
+			//dude.fistProgress = ploxfight.FIST_TIME;
+			dude.bullet = ploxfight.getBullet(dude);
 		}
 	};
 
@@ -101,6 +74,31 @@
 
 		object.x += xChange * adjust;
 		object.y += yChange * adjust;
+	};
+
+	ploxfight.getNewPosition = function (x, y, xForce, yForce, speed) {
+		var xAbs = Math.abs(xForce);
+		var yAbs = Math.abs(yForce);
+
+		var xQuota = xAbs / (xAbs + yAbs);
+		var yQuota = 1 - xQuota;
+
+		var xChange = xQuota;
+		if (xForce < 0) {
+			xChange *= -1;
+		}
+		var yChange = yQuota;
+		if (yForce < 0) {
+			yChange *= -1;
+		}
+
+		var achievedSpeed = Math.sqrt(yChange * yChange + xChange * xChange);
+		var adjust = speed / achievedSpeed;
+
+		return {
+			x: x + xChange * adjust,
+			y: y + yChange * adjust
+		};
 	};
 
 	ploxfight.startControl = function () {

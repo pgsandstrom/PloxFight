@@ -33,8 +33,8 @@
 			ploxfight.prepareImages();
 			setTimeout(function () {
 				ploxfight.game = ploxfight.gameTest();
-			}, 250);
-		}, 100);
+			}, 10);
+		}, 400);
 	});
 
 
@@ -116,6 +116,7 @@
 		this.shapeHeight = 20;
 		this.pushability = 100;
 
+		this.bullet = undefined;
 		this.fistProgress = 0;
 		this.tumbleProgress = 0;
 	};
