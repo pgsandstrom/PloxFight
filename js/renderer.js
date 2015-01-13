@@ -46,7 +46,7 @@
 				//var e = new Date().getTime() + (20);	// Faked waiting for testing purposes
 				//while (new Date().getTime() <= e) {}
 				var time = Date.now() - startTime;
-				if (time > 8 && startTime > renderer.startTime + 300) {
+				if (time > 15 && startTime > renderer.startTime + 300) {
 					console.log("SLOW RENDER TIC: " + time);
 				}
 				//console.log("RENDER TIC: " + time);
@@ -154,10 +154,11 @@
 		context.rotate(object.degree);
 		context.translate(-object.x, -object.y);
 
-		paintSquareBorder(object);
-		if (object.fistProgress > 0) {
-			paintSquareBorder(object.fist);
-
+		if (object.shape === ploxfight.shape.SQUARE) {
+			paintSquareBorder(object);
+			if (object.fist !== undefined) {
+				paintSquareBorder(object.fist);
+			}
 		}
 	};
 

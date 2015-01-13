@@ -31,20 +31,7 @@
 	};
 
 	ploxfight.getBullet = function (dude) {
-		var xForce = Math.sin(dude.degree);
-		var yForce = Math.cos(dude.degree);
-
 		var bullet = new Bullet(dude);
-
-		// move to front of character:
-		ploxfight.performMove(bullet, xForce, yForce, dude.shapeHeight);
-
-		// shift slightly to the right::
-		var rightDegree = dude.degree - Math.PI / 2;
-		var xForceRight = Math.sin(rightDegree);
-		var yForceRight = Math.cos(rightDegree);
-		ploxfight.performMove(bullet, xForceRight, yForceRight, 10);
-
 		return bullet;
 	};
 
@@ -58,11 +45,35 @@
 		//this.endY;
 		this.shape = ploxfight.shape.LINE;
 		this.shapeLength = 10;	//TODO: Skippa length, bara låta den "vara" speed?
-		this.speed = 50;
+		this.speed = 30;
 		this.age = 0;
 		this.active = true;
 
-		this.update();
+		this.fixInitPosition(dude);
+	};
+
+	Bullet.prototype.fixInitPosition = function (dude) {
+		var xForce = Math.sin(dude.degree);
+		var yForce = Math.cos(dude.degree);
+
+		// move to front of character:
+		ploxfight.performMove(this, xForce, yForce, dude.shapeHeight / 2);
+
+		// shift slightly to the right::
+		var rightDegree = dude.degree - Math.PI / 2;
+		var xForceRight = Math.sin(rightDegree);
+		var yForceRight = Math.cos(rightDegree);
+		ploxfight.performMove(this, xForceRight, yForceRight, 10);
+
+		var xForce = Math.sin(this.degree);
+		var yForce = Math.cos(this.degree);
+
+		//ploxfight.performMove(this, xForce, yForce, this.speed);
+
+		var endPosition = ploxfight.getNewPosition(this.x, this.y, xForce, yForce, this.speed);
+
+		this.endX = endPosition.x;
+		this.endY = endPosition.y;
 	};
 
 	Bullet.prototype.update = function () {

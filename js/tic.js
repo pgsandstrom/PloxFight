@@ -20,7 +20,7 @@
 			var startTime = Date.now();
 			tic.tic();
 			var time = Date.now() - startTime;
-			if (time > 8) {
+			if (time > 15) {
 				console.log("SLOW GAME TIC: " + time);
 			}
 			//console.log("GAME   TIC: " + time);
@@ -46,13 +46,16 @@
 
 		this.game.eventTrigger(this.game);
 
+		this.updateBoard();
+
+		//all control stuff:
 		this.handleControl(this.game.player);
 		this.resetControl(this.game.player);
 		for (var i = 0; i < this.game.opponents.length; i++) {
 			var dude = this.game.opponents[i];
 			ploxfight.ai(this.game, dude);
 		}
-		this.updateBoard();
+
 	};
 
 	Tic.prototype.updateBoard = function () {
@@ -107,7 +110,7 @@
 			this.objectFall(dude);
 		} else {
 			if (tile.health > 0) {
-				//tile.health -= 10;
+				tile.health -= 10;
 			}
 			if (tile.breaking > 0 && dude.height < 0) {	// Abort falling
 				dude.height = 0;
@@ -117,6 +120,8 @@
 		if (dude.fistProgress > 0) {
 			dude.fistProgress -= ploxfight.GAME_TIC_TIME;
 			dude.fist = ploxfight.getFist(dude);
+		} else {
+			dude.fist = undefined;
 		}
 
 		if (dude.bullet != undefined && dude.bullet.active) {

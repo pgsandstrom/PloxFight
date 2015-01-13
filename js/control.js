@@ -47,33 +47,15 @@
 		}
 
 		if (moves[ploxfight.MOVE_HIT] && dude.fistProgress <= 0) {
-			//dude.fistProgress = ploxfight.FIST_TIME;
+			dude.fistProgress = ploxfight.FIST_TIME;
 			dude.bullet = ploxfight.getBullet(dude);
 		}
 	};
 
 	ploxfight.performMove = function (object, xForce, yForce, speed) {
-		var xAbs = Math.abs(xForce);
-		var yAbs = Math.abs(yForce);
-
-		var xQuota = xAbs / (xAbs + yAbs);
-		var yQuota = 1 - xQuota;
-
-		var xChange = xQuota;
-		if (xForce < 0) {
-			xChange *= -1;
-		}
-		var yChange = yQuota;
-		if (yForce < 0) {
-			yChange *= -1;
-		}
-
-		// We just multiply so it gets the length it is supposed to have
-		var achievedSpeed = Math.sqrt(yChange * yChange + xChange * xChange);
-		var adjust = speed / achievedSpeed;
-
-		object.x += xChange * adjust;
-		object.y += yChange * adjust;
+		var newPosition = ploxfight.getNewPosition(object.x, object.y, xForce, yForce, speed);
+		object.x = newPosition.x;
+		object.y = newPosition.y;
 	};
 
 	ploxfight.getNewPosition = function (x, y, xForce, yForce, speed) {
@@ -92,6 +74,7 @@
 			yChange *= -1;
 		}
 
+		// We just multiply so it gets the length it is supposed to have
 		var achievedSpeed = Math.sqrt(yChange * yChange + xChange * xChange);
 		var adjust = speed / achievedSpeed;
 
