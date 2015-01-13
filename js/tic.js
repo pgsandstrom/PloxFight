@@ -46,6 +46,7 @@
 
 		this.game.eventTrigger(this.game);
 
+		//TODO: Nu buggar det loss då vi uppdaterar fist-position före player-position osv :(
 		this.updateBoard();
 
 		//all control stuff:
@@ -117,9 +118,11 @@
 			}
 		}
 
-		if (dude.fistProgress > 0) {	//TODO: fistprogress borde ligga i Fist
-			dude.fistProgress -= ploxfight.GAME_TIC_TIME;
+		if (dude.loadFist === true || (dude.fist !== undefined && dude.fist.fistProgress > 0)) {
+			var fistProgress = (dude.fist !== undefined ? dude.fist.fistProgress - ploxfight.GAME_TIC_TIME : ploxfight.FIST_TIME);
 			dude.fist = ploxfight.getFist(dude);
+			dude.fist.fistProgress = fistProgress;
+			dude.loadFist = false;
 		} else {
 			dude.fist = undefined;
 		}

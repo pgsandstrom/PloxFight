@@ -46,8 +46,8 @@
 			ploxfight.performMove(dude, xForceRight, yForceRight, playerSpeed);
 		}
 
-		if (moves[ploxfight.MOVE_HIT] && dude.fistProgress <= 0) {
-			dude.fistProgress = ploxfight.FIST_TIME;
+		if (moves[ploxfight.MOVE_HIT] && dude.fist === undefined) {
+			dude.loadFist = true;
 			dude.bullet = ploxfight.getBullet(dude);
 		}
 	};

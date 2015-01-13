@@ -15,7 +15,8 @@
 			shape: ploxfight.shape.SQUARE,
 			shapeWidth: 10,
 			shapeHeight: dude.shapeHeight,
-			pushability: 0
+			pushability: 0,
+			fistProgress: ploxfight.FIST_TIME
 		};
 
 		// move to front of character:

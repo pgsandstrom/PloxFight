@@ -117,7 +117,7 @@
 		this.pushability = 100;
 
 		this.bullet = undefined;
-		this.fistProgress = 0;
+		this.loadFist = false;
 		this.tumbleProgress = 0;
 	};
 
