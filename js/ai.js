@@ -34,12 +34,12 @@
 			waitTime -= ploxfight.GAME_TIC_TIME;
 		}
 
-		if (hitTimer <= 0) {
-			moves[ploxfight.MOVE_HIT] = true;
-			hitTimer = HIT_FREQUENCY;
-		} else {
-			hitTimer -= ploxfight.GAME_TIC_TIME;
-		}
+		//if (hitTimer <= 0) {
+		//	moves[ploxfight.MOVE_HIT] = true;
+		//	hitTimer = HIT_FREQUENCY;
+		//} else {
+		//	hitTimer -= ploxfight.GAME_TIC_TIME;
+		//}
 
 		ploxfight.updateDude(dude, moves);
 	};

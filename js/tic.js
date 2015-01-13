@@ -56,6 +56,8 @@
 			ploxfight.ai(this.game, dude);
 		}
 
+		this.updateCollisions();
+
 	};
 
 	Tic.prototype.updateBoard = function () {
@@ -66,8 +68,6 @@
 			var dude = this.game.opponents[i];
 			this.checkPlayerState(dude);
 		}
-
-		this.updateCollisions();
 	};
 
 	Tic.prototype.updateTiles = function () {
@@ -117,7 +117,7 @@
 			}
 		}
 
-		if (dude.fistProgress > 0) {
+		if (dude.fistProgress > 0) {	//TODO: fistprogress borde ligga i Fist
 			dude.fistProgress -= ploxfight.GAME_TIC_TIME;
 			dude.fist = ploxfight.getFist(dude);
 		} else {
@@ -214,7 +214,7 @@
 	Tic.prototype.addPlayerCollision = function (collisionables, dude) {
 		collisionables.push(dude);
 
-		if (dude.fistProgress > 0) {
+		if (dude.fist !== undefined) {
 			collisionables.push(dude.fist);
 		}
 	};
