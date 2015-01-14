@@ -27,14 +27,9 @@
 	//ploxfight.canvasX;
 	//ploxfight.canvasY;
 
-	$(function () {
-		// Fugly wait for images to load
-		setTimeout(function () {
-			ploxfight.prepareImages();
-			setTimeout(function () {
-				ploxfight.game = ploxfight.gameTest();
-			}, 10);
-		}, 400);
+	$(window).load(function() {
+		ploxfight.prepareImages();
+		ploxfight.game = ploxfight.gameTest();
 	});
 
 
