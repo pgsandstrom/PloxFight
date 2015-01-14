@@ -102,7 +102,7 @@
 
 	Tic.prototype.checkPlayerState = function (dude) {
 		if (dude.height <= -ploxfight.TILE_HEIGHT) {
-			this.dudeDeath(dude);
+			dude.death();
 		}
 
 		// update the tile the dude is standing on:
@@ -148,10 +148,6 @@
 				object.height = -ploxfight.TILE_HEIGHT;
 			}
 		}
-	};
-
-	Tic.prototype.dudeDeath = function (player) {
-		this.game.running = false;
 	};
 
 	Tic.prototype.handleControl = function (player) {
@@ -210,6 +206,15 @@
 			for (var j = i + 1; j < collisionables.length; j++) {
 				var object2 = collisionables[j];
 				ploxfight.checkCollisions(object1, object2);
+			}
+		}
+
+		for (var i = 0; i < collisionables.length; i++) {
+			var object = collisionables[i];
+			if (object.type === "dude") {
+				if (object.bullet !== undefined) {
+					ploxfight.checkCollisionLine(object.bullet, collisionables);
+				}
 			}
 		}
 	};

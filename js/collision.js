@@ -20,12 +20,7 @@
 
 	ploxfight.checkCollisions = function (object1, object2) {
 
-		//checks:
-		if (object1.shape === undefined || object2.shape === undefined) {
-			throw Error("fuuuu");
-		}
-
-		if (object1.id !== undefined && object1.id === object2.id) {
+		if (!ploxfight.collisionChecks(object1, object2)) {
 			return;
 		}
 
@@ -58,6 +53,19 @@
 			} else {
 				handleCollision(object1, object2);
 			}
+		}
+	};
+
+	ploxfight.collisionChecks = function(object1, object2) {
+		//checks:
+		if (object1.shape === undefined || object2.shape === undefined) {
+			throw Error("fuuuu");
+		}
+
+		if (object1.id !== undefined && object1.id === object2.id) {
+			return false;
+		} else  {
+			return true;
 		}
 	};
 

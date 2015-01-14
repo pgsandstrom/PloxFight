@@ -164,8 +164,8 @@
 
 	var renderBullet = function (bullet) {
 		context.beginPath();
-		context.moveTo(bullet.x, bullet.y);
-		context.lineTo(bullet.endX, bullet.endY);
+		context.moveTo(bullet.start.x, bullet.start.y);
+		context.lineTo(bullet.end.x, bullet.end.y);
 		context.stroke();
 	};
 
@@ -212,7 +212,6 @@
 		//console.log(timeInMs);
 	}
 
-	//TODO: This will bug out if not all images have loaded when we do this
 	ploxfight.prepareImages = function () {
 		var canvasTemp = document.getElementById('canvas-temp');
 		var contextTemp = canvasTemp.getContext('2d');

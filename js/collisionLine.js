@@ -7,6 +7,11 @@
 		var hitObject;
 		for (var i = 0; i < objectList.length; i++) {
 			var object = objectList[i];
+
+			if (!ploxfight.collisionChecks(line, object)) {
+				continue;
+			}
+
 			if (object.shape === ploxfight.shape.SQUARE) {
 				var result = getSquareCollisionPlace(line, object);
 				if (result !== false && (closest === false || result < closest)) {
@@ -17,11 +22,12 @@
 				//TODO
 			}
 		}
-
-		hitObject.hit();	// or something
+		if (hitObject !== undefined) {
+			hitObject.bulletHit();	// or something
+		}
 	};
 
-	var getSquareCollisionPlace = function (line, object) {
+	var getSquareCollisionPlace = function (line, square) {
 		var lines = ploxfight.getSquareLines(square);
 		var closest = false;
 		for (var i = 0; i < lines.length; i++) {

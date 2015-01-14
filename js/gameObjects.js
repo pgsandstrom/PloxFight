@@ -40,14 +40,9 @@
 		this.type = "bullet";
 		this.id = dude.id;
 		this.degree = dude.degree;
-		this.x = dude.x;
-		this.y = dude.y;
-		//this.endX;
-		//this.endY;
+		this.start = ploxfight.getPoint(dude.x, dude.y);
 		this.shape = ploxfight.shape.LINE;
-		this.shapeLength = 10;	//TODO: Skippa length, bara låta den "vara" speed?
 		this.speed = 30;
-		this.age = 0;
 		this.active = true;
 
 		this.fixInitPosition(dude);
@@ -60,7 +55,7 @@
 		// move to front of character:
 		ploxfight.performMove(this, xForce, yForce, dude.shapeHeight / 2);
 
-		// shift slightly to the right::
+		// shift slightly to the right:
 		var rightDegree = dude.degree - Math.PI / 2;
 		var xForceRight = Math.sin(rightDegree);
 		var yForceRight = Math.cos(rightDegree);
@@ -69,24 +64,15 @@
 		var xForce = Math.sin(this.degree);
 		var yForce = Math.cos(this.degree);
 
-		//ploxfight.performMove(this, xForce, yForce, this.speed);
-
-		var endPosition = ploxfight.getNewPosition(this.x, this.y, xForce, yForce, this.speed);
-
-		this.endX = endPosition.x;
-		this.endY = endPosition.y;
+		this.end = ploxfight.getNewPosition(this.start.x, this.start.y, xForce, yForce, this.speed);
 	};
 
 	Bullet.prototype.update = function () {
 		var xForce = Math.sin(this.degree);
 		var yForce = Math.cos(this.degree);
 
-		ploxfight.performMove(this, xForce, yForce, this.speed);
-
-		var endPosition = ploxfight.getNewPosition(this.x, this.y, xForce, yForce, this.speed);
-
-		this.endX = endPosition.x;
-		this.endY = endPosition.y;
+		ploxfight.performMove(this.start, xForce, yForce, this.speed);
+		this.end = ploxfight.getNewPosition(this.start.x, this.start.y, xForce, yForce, this.speed);
 	}
 
 })();

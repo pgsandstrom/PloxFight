@@ -27,7 +27,7 @@
 	//ploxfight.canvasX;
 	//ploxfight.canvasY;
 
-	$(window).load(function() {
+	$(window).load(function () {
 		ploxfight.prepareImages();
 		ploxfight.game = ploxfight.gameTest();
 	});
@@ -91,15 +91,22 @@
 	};
 
 	Game.prototype.newPlayer = function () {
-		return new Player(this.playerIdGenerator++, 175, 175);
+		return new Player(this, this.playerIdGenerator++, 175, 175);
 	};
 
 	Game.prototype.newOpponent = function () {
-		return new Player(this.playerIdGenerator++, 425, 425);
+		return new Player(this, this.playerIdGenerator++, 425, 425);
 	};
 
-	ploxfight.Player = function Player(id, x, y) {
+	Game.prototype.playerDeath = function (deadDude) {
+		this.opponents = this.opponents.filter(function (dude) {
+			return dude.id !== deadDude.id;
+		});
+	};
+
+	ploxfight.Player = function Player(game, id, x, y) {
 		this.type = "dude";
+		this.game = game;
 		this.id = id;
 		this.health = 100;
 		this.height = 0;
@@ -117,6 +124,14 @@
 	};
 
 	var Player = ploxfight.Player;
+
+	Player.prototype.bulletHit = function () {
+		this.death();
+	};
+
+	Player.prototype.death = function () {
+		this.game.playerDeath(this);
+	};
 
 	ploxfight.Barrel = function Barrel(x, y) {
 		this.type = "barrel";
