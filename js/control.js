@@ -87,7 +87,6 @@
 	ploxfight.startControl = function () {
 
 		$(document).click(function (event) {
-			console.log("click");
 			ploxfight.key_hit = true;
 			event.preventDefault();
 			return false;

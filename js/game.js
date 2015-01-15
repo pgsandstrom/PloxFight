@@ -110,10 +110,17 @@
 		this.bullets.push(bullet);
 	};
 
+	Game.prototype.removeBullet = function (deadBullet) {
+		this.bullets = this.bullets.filter(function (bullet) {
+			return bullet.id !== deadBullet.id;
+		});
+	};
+
 	ploxfight.Player = function Player(game, id, x, y) {
 		this.type = "dude";
 		this.game = game;
 		this.id = id;
+		this.groupId = id;
 		this.health = 100;
 		this.height = 0;
 		this.degree = 0;
@@ -135,8 +142,9 @@
 		this.game.addBullet(bullet);
 	};
 
-	Player.prototype.bulletHit = function () {
+	Player.prototype.bulletHit = function (bullet) {
 		this.death();
+		this.game.removeBullet(bullet);
 	};
 
 	Player.prototype.death = function () {

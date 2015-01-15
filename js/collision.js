@@ -62,7 +62,7 @@
 			throw Error("fuuuu");
 		}
 
-		if (object1.id !== undefined && object1.id === object2.id) {
+		if (object1.groupId !== undefined && object1.groupId === object2.groupId) {
 			return false;
 		} else  {
 			return true;

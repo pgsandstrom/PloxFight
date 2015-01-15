@@ -8,7 +8,7 @@
 
 		var fist = {
 			type: "fist",
-			id: dude.id,
+			groupId: dude.id,
 			degree: dude.degree,
 			x: dude.x,
 			y: dude.y,
@@ -36,9 +36,12 @@
 		return bullet;
 	};
 
+	var bulletIdGenerator = 0;
+
 	var Bullet = function Bullet(dude) {
 		this.type = "bullet";
-		this.id = dude.id;
+		this.id = bulletIdGenerator++;
+		this.groupId = dude.id;
 		this.degree = dude.degree;
 		this.start = ploxfight.getPoint(dude.x, dude.y);
 		this.shape = ploxfight.shape.LINE;

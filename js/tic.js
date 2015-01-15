@@ -214,7 +214,7 @@
 			var bullet = bullets[i];
 			var hitObject = ploxfight.checkCollisionLine(bullet, collisionables);
 			if (hitObject !== undefined) {
-				hitObject.bulletHit();
+				hitObject.bulletHit(bullet);
 			}
 		}
 	};
