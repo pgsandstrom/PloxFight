@@ -15,6 +15,10 @@
 	ploxfight.TILE_HEIGHT = 100;	//the board is at height 0, the water is at -100
 	ploxfight.HEIGHT_KILL_CONTROL = -12;	//the board is at height 0, the water is at -100
 
+	var $canvas = $("#canvas");
+	ploxfight.canvasX = $canvas.offset().left;
+	ploxfight.canvasY = $canvas.offset().top;
+
 	ploxfight.key_forward = false;
 	ploxfight.key_left = false;
 	ploxfight.key_right = false;
@@ -41,17 +45,12 @@
 		this.player = this.newPlayer();
 		this.opponents = [];
 		this.opponents.push(this.newOpponent());
-		//this.opponents.push(this.newOpponent());
 
 		this.bullets = [];
 
 		this.barrels = [];
 		this.barrels.push(new ploxfight.Barrel());
 		this.barrels.push(new ploxfight.Barrel());
-
-		var $canvas = $("#canvas");	//TODO move this stuff?
-		ploxfight.canvasX = $canvas.offset().left;
-		ploxfight.canvasY = $canvas.offset().top;
 
 		ploxfight.startControl();	//TODO where to place control.js code?
 
@@ -101,9 +100,16 @@
 	};
 
 	Game.prototype.playerDeath = function (deadDude) {
-		this.opponents = this.opponents.filter(function (dude) {
-			return dude.id !== deadDude.id;
-		});
+		for (var i = 0; i < this.opponents.length; i++) {
+			var dude = this.opponents[i];
+			if (dude.id === deadDude.id) {
+				this.opponents.splice(i, 1);
+				break;
+			}
+		}
+		if (this.player.id === deadDude.id) {
+			this.stop();
+		}
 	};
 
 	Game.prototype.addBullet = function (bullet) {
@@ -111,9 +117,18 @@
 	};
 
 	Game.prototype.removeBullet = function (deadBullet) {
-		this.bullets = this.bullets.filter(function (bullet) {
-			return bullet.id !== deadBullet.id;
-		});
+		for (var i = 0; i < this.bullets.length; i++) {
+			var bullet = this.bullets[i];
+			if (bullet.id === deadBullet.id) {
+				this.bullets.splice(i, 1);
+				break;
+			}
+		}
+	};
+
+	Game.prototype.stop = function () {
+		this.running = false;
+		ploxfight.stopControl();
 	};
 
 	ploxfight.Player = function Player(game, id, x, y) {

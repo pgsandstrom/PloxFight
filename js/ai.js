@@ -18,8 +18,6 @@
 			return;
 		}
 
-		//var xForce = game.player.x - (ploxfight.canvasX + dude.x);
-		//var yForce = game.player.y - (ploxfight.canvasY + dude.y);
 		var xForce = game.player.x - dude.x;
 		var yForce = game.player.y - dude.y;
 		var degree = Math.atan2(xForce, yForce);
@@ -27,7 +25,7 @@
 
 		var moves = {};
 
-		//player motion:
+		//dude motion:
 		if (waitTime <= 0) {
 			moves[ploxfight.MOVE_FORWARD] = true;
 		} else {
