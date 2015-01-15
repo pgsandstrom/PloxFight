@@ -30,16 +30,6 @@
 		}, ploxfight.GAME_TIC_TIME - stalled);
 	};
 
-	// Why the fudge does this loop now work?
-	//Tic.prototype.ticRepeater = function () {
-	//	//var time = Date.now();
-	//	this.tic();
-	//	//time = Date.now() - time;
-	//	if (this.game.running) {
-	//		setTimeout(this.ticRepeater(), ploxfight.GAME_TIC_TIME);
-	//	}
-	//};
-
 	Tic.prototype.tic = function () {
 
 		this.ticCount++;

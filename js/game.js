@@ -28,9 +28,6 @@
 	ploxfight.mouseX = 0;
 	ploxfight.mouseY = 0;
 
-	//ploxfight.canvasX;
-	//ploxfight.canvasY;
-
 	$(window).load(function () {
 		ploxfight.prepareImages();
 		ploxfight.game = ploxfight.gameTest();
@@ -52,7 +49,7 @@
 		this.barrels.push(new ploxfight.Barrel());
 		this.barrels.push(new ploxfight.Barrel());
 
-		ploxfight.startControl();	//TODO where to place control.js code?
+		ploxfight.startControl();
 
 		this.renderer = new ploxfight.Renderer(this);
 		this.renderer.startRender();
