@@ -53,13 +53,13 @@
 		var yForce = Math.cos(dude.degree);
 
 		// move to front of character:
-		ploxfight.performMove(this, xForce, yForce, dude.shapeHeight / 2);
+		ploxfight.performMove(this.start, xForce, yForce, dude.shapeHeight / 2);
 
 		// shift slightly to the right:
 		var rightDegree = dude.degree - Math.PI / 2;
 		var xForceRight = Math.sin(rightDegree);
 		var yForceRight = Math.cos(rightDegree);
-		ploxfight.performMove(this, xForceRight, yForceRight, 10);
+		ploxfight.performMove(this.start, xForceRight, yForceRight, 10);
 
 		var xForce = Math.sin(this.degree);
 		var yForce = Math.cos(this.degree);

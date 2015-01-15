@@ -48,7 +48,7 @@
 
 		if (moves[ploxfight.MOVE_HIT] && dude.fist === undefined) {
 			dude.loadFist = true;
-			dude.bullet = ploxfight.getBullet(dude);
+			dude.shoot();
 		}
 	};
 
@@ -87,6 +87,7 @@
 	ploxfight.startControl = function () {
 
 		$(document).click(function (event) {
+			console.log("click");
 			ploxfight.key_hit = true;
 			event.preventDefault();
 			return false;

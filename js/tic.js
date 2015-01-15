@@ -69,6 +69,11 @@
 			var dude = this.game.opponents[i];
 			this.checkPlayerState(dude);
 		}
+
+		for (var i = 0; i < this.game.bullets.length; i++) {
+			var bullet = this.game.bullets[i];
+			bullet.update();
+		}
 	};
 
 	Tic.prototype.updateTiles = function () {
@@ -111,7 +116,7 @@
 			this.objectFall(dude);
 		} else {
 			if (tile.health > 0) {
-				tile.health -= 10;
+				tile.health -= 5;
 			}
 			if (tile.breaking > 0 && dude.height < 0) {	// Abort falling
 				dude.height = 0;
@@ -125,11 +130,6 @@
 			dude.loadFist = false;
 		} else {
 			dude.fist = undefined;
-		}
-
-		if (dude.bullet != undefined && dude.bullet.active) {
-			//TODO: låt bullets vara fristående från karaktären
-			dude.bullet.update();
 		}
 
 		if (dude.tumbleProgress > 0) {
@@ -209,12 +209,12 @@
 			}
 		}
 
-		for (var i = 0; i < collisionables.length; i++) {
-			var object = collisionables[i];
-			if (object.type === "dude") {
-				if (object.bullet !== undefined) {
-					ploxfight.checkCollisionLine(object.bullet, collisionables);
-				}
+		var bullets = this.game.bullets;
+		for (var i = 0; i < bullets.length; i++) {
+			var bullet = bullets[i];
+			var hitObject = ploxfight.checkCollisionLine(bullet, collisionables);
+			if (hitObject !== undefined) {
+				hitObject.bulletHit();
 			}
 		}
 	};

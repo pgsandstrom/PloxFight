@@ -22,9 +22,8 @@
 				//TODO
 			}
 		}
-		if (hitObject !== undefined) {
-			hitObject.bulletHit();	// or something
-		}
+
+		return hitObject;
 	};
 
 	var getSquareCollisionPlace = function (line, square) {

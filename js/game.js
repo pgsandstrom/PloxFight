@@ -43,6 +43,8 @@
 		this.opponents.push(this.newOpponent());
 		//this.opponents.push(this.newOpponent());
 
+		this.bullets = [];
+
 		this.barrels = [];
 		this.barrels.push(new ploxfight.Barrel());
 		this.barrels.push(new ploxfight.Barrel());
@@ -104,6 +106,10 @@
 		});
 	};
 
+	Game.prototype.addBullet = function (bullet) {
+		this.bullets.push(bullet);
+	};
+
 	ploxfight.Player = function Player(game, id, x, y) {
 		this.type = "dude";
 		this.game = game;
@@ -118,12 +124,16 @@
 		this.shapeHeight = 20;
 		this.pushability = 100;
 
-		this.bullet = undefined;
 		this.loadFist = false;
 		this.tumbleProgress = 0;
 	};
 
 	var Player = ploxfight.Player;
+
+	Player.prototype.shoot = function () {
+		var bullet = ploxfight.getBullet(this);
+		this.game.addBullet(bullet);
+	};
 
 	Player.prototype.bulletHit = function () {
 		this.death();

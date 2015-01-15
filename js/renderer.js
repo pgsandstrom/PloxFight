@@ -107,6 +107,11 @@
 			this.renderBarrel(this.game.barrels[i]);
 		}
 
+		for (var i = 0; i < this.game.bullets.length; i++) {
+			this.renderBullet(this.game.bullets[i]);
+		}
+
+
 		//paint a circle over the character:
 		//context.beginPath();
 		//context.arc(player.x, player.y, 3, 0, 2 * Math.PI, false);
@@ -120,6 +125,7 @@
 	Renderer.prototype.renderBarrel = function (barrel) {
 		renderObject(barrel, image_barrel, BARREL_IMAGE_SIZE);
 	};
+
 	Renderer.prototype.renderDude = function (dude, dudeIndex) {
 		var image;
 		if (dude.tumbleProgress <= 0) {
@@ -136,11 +142,6 @@
 			}
 		}
 		renderObject(dude, image, PLAYER_IMAGE_SIZE);
-
-		if (dude.bullet !== undefined && dude.bullet.active) {
-			renderBullet(dude.bullet);
-		}
-
 	};
 
 	var renderObject = function (object, image, imageSize) {
@@ -162,7 +163,7 @@
 		}
 	};
 
-	var renderBullet = function (bullet) {
+	Renderer.prototype.renderBullet = function (bullet) {
 		context.beginPath();
 		context.moveTo(bullet.start.x, bullet.start.y);
 		context.lineTo(bullet.end.x, bullet.end.y);
