@@ -87,14 +87,12 @@
 	ploxfight.startControl = function () {
 
 		$(document).click(function (event) {
-			console.log("click");
 			ploxfight.key_hit = true;
 			event.preventDefault();
 			return false;
 		});
 
 		$(document).dblclick(function (event) {
-			console.log("dblclick");
 			event.preventDefault();
 			return false;
 		});
@@ -102,13 +100,11 @@
 		ploxfight.mouseX = 300;
 		ploxfight.mouseY = 300;
 		$(document).mousemove(function (event) {
-			console.log("mouse");
 			ploxfight.mouseX = event.pageX;
 			ploxfight.mouseY = event.pageY;
 		});
 
 		$(document).keydown(function (e) {
-			console.log("keydown");
 			if (e.which == 87) { //w
 				ploxfight.key_forward = true;
 			}
@@ -124,7 +120,6 @@
 		});
 
 		$(document).keyup(function (e) {
-			console.log("keyup");
 			if (e.which == 87) { //w
 				ploxfight.key_forward = false;
 			}

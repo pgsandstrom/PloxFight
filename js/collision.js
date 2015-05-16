@@ -56,7 +56,7 @@
 		}
 	};
 
-	ploxfight.collisionChecks = function(object1, object2) {
+	ploxfight.collisionChecks = function (object1, object2) {
 		//checks:
 		if (object1.shape === undefined || object2.shape === undefined) {
 			throw Error("fuuuu");
@@ -64,7 +64,7 @@
 
 		if (object1.groupId !== undefined && object1.groupId === object2.groupId) {
 			return false;
-		} else  {
+		} else {
 			return true;
 		}
 	};

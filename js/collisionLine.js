@@ -19,11 +19,28 @@
 					hitObject = object;
 				}
 			} else if (object.shape === ploxfight.shape.CIRCLE) {
-				//TODO
+				circleCollision(line, object);
 			}
 		}
 
 		return hitObject;
+	};
+
+	var circleCollision = function (line, circle) {
+
+		//var leftNormal = line.rotate(Math.PI * -0.5);
+		//TODO: jag tror även vi måste kolla när vi roterar den 90 grader åt andra hållet också.
+		//TODO: Det går att rotera snyggare också... fixa allt sånt här!
+		var leftNormal = new ploxfight.Vector(line.end.x - line.start.x, line.end.y - line.start.y, Math.PI * -0.5);
+
+		//calculating line's perpendicular distance to ball
+		var c1_circle = new ploxfight.Vector(circle.x - line.start.x, circle.y - line.start.y);
+		c1_circle.project(leftNormal);
+		var length = c1_circle.len();
+
+		if (length <= circle.radius) {
+			console.log("plox with the circle");
+		}
 	};
 
 	var getSquareCollisionPlace = function (line, square) {
@@ -57,7 +74,7 @@
 		if (CmPxr === 0) {
 			// Lines are collinear, and so intersect if they have any overlap
 			//return ((C.x - A.x < 0) != (C.x - B.x < 0)) || ((C.y - A.y < 0) != (C.y - B.y < 0));
-			//TODO temporarily just return false
+			//just return false... pretend it was a miss :)
 			return false;
 		}
 

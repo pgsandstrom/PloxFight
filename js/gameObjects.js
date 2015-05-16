@@ -76,6 +76,8 @@
 
 		ploxfight.performMove(this.start, xForce, yForce, this.speed);
 		this.end = ploxfight.getNewPosition(this.start.x, this.start.y, xForce, yForce, this.speed);
+
+		// TODO: Bullets måste dö om de bara åker iväg du vet lol
 	}
 
 })();

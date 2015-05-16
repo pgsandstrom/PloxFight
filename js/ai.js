@@ -4,7 +4,7 @@
 
 	var HIT_FREQUENCY = 1200;
 
-	var waitTime = 2000;
+	var waitTime = 21231000;
 	var hitTimer = HIT_FREQUENCY;
 
 

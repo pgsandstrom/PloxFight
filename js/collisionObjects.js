@@ -9,7 +9,7 @@
 			//this.degree = 0;
 		} else {
 			this.x = ploxfight.rotateX(x, y, degree);
-			this.y = ploxfight.rotateX(x, y, degree);
+			this.y = ploxfight.rotateY(x, y, degree);
 			//this.degree = degree;
 		}
 
