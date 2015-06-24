@@ -62,7 +62,10 @@
 
 		for (var i = 0; i < this.game.bullets.length; i++) {
 			var bullet = this.game.bullets[i];
-			bullet.update();
+			var isOld = bullet.update();
+			if(isOld) {
+				this.game.removeBullet(bullet);
+			}
 		}
 	};
 

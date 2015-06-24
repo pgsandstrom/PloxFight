@@ -47,6 +47,7 @@
 		this.shape = ploxfight.shape.LINE;
 		this.speed = 30;
 		this.active = true;
+		this.age = 0;
 
 		this.fixInitPosition(dude);
 	};
@@ -70,6 +71,9 @@
 		this.end = ploxfight.getNewPosition(this.start.x, this.start.y, xForce, yForce, this.speed);
 	};
 
+	/**
+	 * @returns {boolean} if the bullet is old enough to be deleted
+	 */
 	Bullet.prototype.update = function () {
 		var xForce = Math.sin(this.degree);
 		var yForce = Math.cos(this.degree);
@@ -77,7 +81,8 @@
 		ploxfight.performMove(this.start, xForce, yForce, this.speed);
 		this.end = ploxfight.getNewPosition(this.start.x, this.start.y, xForce, yForce, this.speed);
 
-		// TODO: Bullets måste dö om de bara åker iväg du vet lol
+		this.age++;
+		return this.age >= ploxfight.BULLET_LIFETIME;
 	}
 
 })();
