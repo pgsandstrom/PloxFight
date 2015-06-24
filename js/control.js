@@ -27,23 +27,28 @@
 			playerSpeed = Math.sqrt((playerSpeed * playerSpeed) / 2);
 		}
 
+		// Den utkommeterade koden i rörelsen är den gamla konstiga kontrollen
 		if (moves[ploxfight.MOVE_FORWARD]) {
-			ploxfight.performMove(dude, xForce, yForce, playerSpeed);
+			//ploxfight.performMove(dude, xForce, yForce, playerSpeed);
+			ploxfight.performMove(dude, 0, -1, playerSpeed)
 		}
 		if (moves[ploxfight.MOVE_BACKWARD]) {
-			ploxfight.performMove(dude, -xForce, -yForce, playerSpeed);
+			//ploxfight.performMove(dude, -xForce, -yForce, playerSpeed);
+			ploxfight.performMove(dude, 0, 1, playerSpeed)
 		}
 		if (moves[ploxfight.MOVE_LEFT]) {
-			var leftDegree = dude.degree + Math.PI / 2;
-			var xForceLeft = Math.sin(leftDegree);
-			var yForceLeft = Math.cos(leftDegree);
-			ploxfight.performMove(dude, xForceLeft, yForceLeft, playerSpeed);
+			//var leftDegree = dude.degree + Math.PI / 2;
+			//var xForceLeft = Math.sin(leftDegree);
+			//var yForceLeft = Math.cos(leftDegree);
+			//ploxfight.performMove(dude, xForceLeft, yForceLeft, playerSpeed);
+			ploxfight.performMove(dude, -1, 0, playerSpeed)
 		}
 		if (moves[ploxfight.MOVE_RIGHT]) {
-			var rightDegree = dude.degree - Math.PI / 2;
-			var xForceRight = Math.sin(rightDegree);
-			var yForceRight = Math.cos(rightDegree);
-			ploxfight.performMove(dude, xForceRight, yForceRight, playerSpeed);
+			//var rightDegree = dude.degree - Math.PI / 2;
+			//var xForceRight = Math.sin(rightDegree);
+			//var yForceRight = Math.cos(rightDegree);
+			//ploxfight.performMove(dude, xForceRight, yForceRight, playerSpeed);
+			ploxfight.performMove(dude, 1, 0, playerSpeed)
 		}
 
 		if (moves[ploxfight.MOVE_HIT] && dude.fist === undefined) {
